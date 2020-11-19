@@ -18,9 +18,7 @@ Advantages:
 * Magnolia >= 6.0
 
 ## Magnolia Version Mapping
-* PowerNode 2.3.x-SNAPSHOT → <= Magnolia 6.2.x
-* PowerNode 2.2.0 → Magnolia 6.2.x
-* PowerNode 2.1.0 → Magnolia 6.1.x
+* PowerNode 1.0.0-SNAPSHOT → <= Magnolia 6.2.x
 
 ## Installation
 
@@ -29,7 +27,7 @@ Advantages:
 <dependency>
     <groupId>com.namics.oss.magnolia</groupId>
     <artifactId>magnolia-powernode</artifactId>
-    <version>2.2.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 * Import Spring Configuration:
@@ -70,9 +68,4 @@ public class BlossomServletConfiguration {
   * Time value comparison
   Storing time values in nodes requires the usage of java.util.Calendar objects, which can't handle nano seconds.
   If a value comparison is needed using a more accurate format like java.time.LocalDateTime, make sure to only use time values in milliseconds (e.g. LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS)).
-  Otherwise, it would case failures e.g. on Windows based environments.  
-  
-  ## How to release
-  1. Create a release branch matching the following pattern 'release/\<semver\>' (eg. 'release/1.6.0')
-  2. Pushing this branch triggers the git-flow process (merge to master, merge to develop, version increment, tag creation)
-  3. A tag, which matches a semantic version pattern, triggers the maven deployment.
+  Otherwise, it would case failures e.g. on Windows based environments.

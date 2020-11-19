@@ -11,7 +11,7 @@ if [[ $CURRENT_VERSION == *-SNAPSHOT ]]; then
 	mvn versions:set -DnewVersion=$NEW_VERSION versions:commit --no-transfer-progress
 
  	echo "commit new release version"
-	git commit -a -m "Release $NEW_VERSION: set master to new release version"
+	git commit -a -m "Release $NEW_VERSION: set main to new release version"
 
 	echo "Update version in README.md"
 	sed -i -e "s|<version>[0-9A-Za-z._-]\{1,\}</version>|<version>$NEW_VERSION</version>|g" README.md && rm -f README.md-e
@@ -20,10 +20,10 @@ if [[ $CURRENT_VERSION == *-SNAPSHOT ]]; then
 	echo "create tag for new release"
 	git tag -a $NEW_VERSION -m "Release $NEW_VERSION: tag release"
 
-	echo "merge master back to develop"
+	echo "merge main back to develop"
 	git fetch --all
 	git checkout develop
-	git merge master
+	git merge main
 
 	mvn versions:set -DnewVersion=$NEXT_SNAPSHOT versions:commit --no-transfer-progress
 
