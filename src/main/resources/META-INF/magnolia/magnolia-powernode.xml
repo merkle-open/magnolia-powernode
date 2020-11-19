@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+	<name>magnolia-powernode</name>
+	<displayName>Magnolia Powernode</displayName>
+	<description>Powerful wrapper for JCR nodes</description>
+	<class>com.namics.oss.magnolia.powernode.PowerNodeModule</class>
+	<versionHandler>com.namics.oss.magnolia.powernode.setup.PowerNodeModuleVersionHandler</versionHandler>
+	<version>${project.version}</version>
+
+	<components>
+		<id>main</id>
+		<component>
+			<type>com.namics.oss.magnolia.powernode.PowerNodeService</type>
+			<implementation>com.namics.oss.magnolia.powernode.PowerNodeService</implementation>
+		</component>
+	</components>
+
+	<dependencies>
+		<dependency>
+			<name>core</name>
+			<version>*</version>
+		</dependency>
+		<dependency>
+			<name>rendering</name>
+			<version>*</version>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+</module>
