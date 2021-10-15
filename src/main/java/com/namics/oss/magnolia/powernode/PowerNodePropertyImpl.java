@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.jcr.*;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -397,7 +398,7 @@ class PowerNodePropertyImpl {
 
 	private <T> T getLocalizedProperty(@Nonnull Node node, String name, T defaultValue, RepoBiFunction<Node, String, T> extractor, Locale locale) {
 		String suffix = StringUtils.EMPTY;
-		boolean isNotDefault = !locale.equals(defaultLanguageHelper.getDefaultLanguage());
+		boolean isNotDefault = !equalsLanguage(locale, defaultLanguageHelper.getDefaultLanguage());
 		if (isNotDefault) {
 			suffix = "_" + locale.getLanguage();
 		}
@@ -406,6 +407,13 @@ class PowerNodePropertyImpl {
 		}
 		String propName = name + suffix;
 		return getValueFromProp(node, propName, defaultValue, extractor);
+	}
+
+	private boolean equalsLanguage(@Nullable final Locale locale1, @Nullable final Locale locale2) {
+		return Objects.equals(
+				Optional.ofNullable(locale1).map(Locale::getLanguage),
+				Optional.ofNullable(locale2).map(Locale::getLanguage)
+		);
 	}
 
 	@SuppressWarnings("unchecked")
