@@ -4,6 +4,8 @@ import com.namics.oss.magnolia.powernode.exceptions.PowerNodeException;
 import info.magnolia.jcr.iterator.FilteringPropertyIterator;
 import info.magnolia.jcr.predicate.AbstractPredicate;
 import info.magnolia.jcr.util.NodeTypes;
+import info.magnolia.jcr.util.NodeUtil;
+import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 import info.magnolia.link.LinkException;
 import info.magnolia.link.LinkUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -272,8 +274,8 @@ class PowerNodePropertyImpl {
 				return Collections.singletonList((T) extractor.apply(property.getValue()));
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Could not get value list from node '{}', property '{}', type '{}' " + node.toString(), name, type);
-			LOG.trace("Could not get value list from node '{}', property '{}', type '{}' " + node.toString(), name, type, e);
+			LOG.warn("Could not get value list from node '{}', property '{}', type '{}' " + node, name, type);
+			LOG.trace("Could not get value list from node '{}', property '{}', type '{}' " + node, name, type, e);
 		}
 		return Collections.emptyList();
 	}
@@ -290,8 +292,8 @@ class PowerNodePropertyImpl {
 			try {
 				property.remove();
 			} catch (RepositoryException e) {
-				LOG.error("Could not remove property '{}' from node '{}'", name, node.toString());
-				LOG.debug("Could not remove property '{}' from node '{}'", name, node.toString(), e);
+				LOG.error("Could not remove property '{}' from node '{}'", name, node);
+				LOG.debug("Could not remove property '{}' from node '{}'", name, node, e);
 				throw PowerNodeException.wrap(e, PowerNodeException.Type.JCR_REPOSITORY);
 			}
 		});
@@ -390,21 +392,25 @@ class PowerNodePropertyImpl {
 						.orElse(defaultValue);
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Can't read value '{}' of the Node '{}' will return default value", name, node.toString());
-			LOG.trace("Can't read value '{}' of the Node '{}' will return default value", name, node.toString(), e);
+			LOG.warn("Can't read value '{}' of the Node '{}' will return default value", name, node);
+			LOG.trace("Can't read value '{}' of the Node '{}' will return default value", name, node, e);
 		}
 		return defaultValue;
 	}
 
 	private <T> T getLocalizedProperty(@Nonnull Node node, String name, T defaultValue, RepoBiFunction<Node, String, T> extractor, Locale locale) {
 		String suffix = StringUtils.EMPTY;
-		boolean isNotDefault = !equalsLanguage(locale, defaultLanguageHelper.getDefaultLanguage());
-		if (isNotDefault) {
-			suffix = "_" + locale.getLanguage();
+		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
+			boolean isNotDefault = !equalsLanguage(locale, defaultLanguageHelper.getDefaultLanguage());
+			if (isNotDefault) {
+				suffix = "_" + locale.getLanguage();
+			}
 		}
+
 		if (StringUtils.isBlank(name)) {
 			return defaultValue;
 		}
+
 		String propName = name + suffix;
 		return getValueFromProp(node, propName, defaultValue, extractor);
 	}
@@ -436,8 +442,8 @@ class PowerNodePropertyImpl {
 				return extractor.apply(node, name);
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node.toString(), e.getMessage());
-			LOG.trace("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node.toString(), e.getMessage(), e);
+			LOG.warn("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node, e.getMessage());
+			LOG.trace("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node, e.getMessage(), e);
 		}
 		return defaultValue;
 	}
@@ -604,7 +610,7 @@ class PowerNodePropertyImpl {
 	 * Predicate needed to filter meta-data nodes such as "jcr:system".
 	 * Nodes not starting with 'jcr:' match the predicate.
 	 */
-	private AbstractPredicate<Property> notSystemPropertyPredicate = new AbstractPredicate<>() {
+	private final AbstractPredicate<Property> notSystemPropertyPredicate = new AbstractPredicate<>() {
 		@Override
 		public boolean evaluateTyped(Property property) {
 			try {
