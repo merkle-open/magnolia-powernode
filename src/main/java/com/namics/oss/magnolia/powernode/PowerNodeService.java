@@ -18,6 +18,7 @@ import javax.jcr.*;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -73,20 +74,13 @@ public class PowerNodeService {
 						if (GET_WRAPPED.equals(method.getName())) {
 							return node;
 						}
-						// try to find the method on the PowerNodeImpl
-						Method powerNodeMethod = getPowerNodeMethod(method, powerNodeImpl);
-						// try to find it also on the PowerNodePropertyImpl
-						Method powerNodePropertyMethod = getPowerNodeMethod(method, powerNodePropertyImpl);
 
-						Object result;
-						if (powerNodeMethod != null) {
-							result = invokePowerNodeHelper(node, powerNodeMethod, methodArgs, powerNodeImpl);
-						} else if (powerNodePropertyMethod != null) {
-							result = invokePowerNodeHelper(node, powerNodePropertyMethod, methodArgs, powerNodePropertyImpl);
-						} else {
-							Method nodeMethod = node.getClass().getMethod(method.getName(), method.getParameterTypes());
-							result = nodeMethod.invoke(node, methodArgs);
-						}
+						ExecutableMethod<Object> executableMethod = getPowerNodeMethod(method, powerNodeImpl)
+								.or(() -> getPowerNodeMethod(method, powerNodePropertyImpl))
+								.orElse(getJcrNodeMethod(method));
+
+						Object result = executableMethod.execute(node, methodArgs);
+
 						// if the result is a node convert to PowerNode
 						if (!(result instanceof PowerNode) && result instanceof Node) {
 							result = this.convertToPowerNode((Node) result);
@@ -103,18 +97,29 @@ public class PowerNodeService {
 				});
 	}
 
-	private Method getPowerNodeMethod(Method method, Object impl) {
-		try {
-			String name = method.getName();
-			Class<?>[] types = ObjectUtils.defaultIfNull(method.getParameterTypes(), new Class<?>[]{});
-			Class<?>[] typesWithNode = ObjectArrays.concat(Node.class, types);
-			Method powerNodeHelperMethod = impl.getClass().getDeclaredMethod(name, typesWithNode);
-			powerNodeHelperMethod.setAccessible(true);
-			return powerNodeHelperMethod;
-		} catch (NoSuchMethodException e) {
-			LOG.trace("Method '{}' not found on '{}'", method.getName(), powerNodeImpl.getClass().getSimpleName(), e);
-		}
-		return null;
+	private ExecutableMethod<Object> getJcrNodeMethod(Method method) {
+		return (node, methodArgs) -> {
+			Method nodeMethod = node.getClass().getMethod(method.getName(), method.getParameterTypes());
+			return nodeMethod.invoke(node, methodArgs);
+		};
+	}
+
+	private Optional<ExecutableMethod<Object>> getPowerNodeMethod(Method method, Object impl) {
+		Class<?>[] types = ObjectUtils.defaultIfNull(method.getParameterTypes(), new Class<?>[]{});
+		Class<?>[] typesWithNode = ObjectArrays.concat(Node.class, types);
+
+		return Arrays.stream(impl.getClass().getDeclaredMethods())
+				.filter(m -> method.getName().equals(m.getName())
+						&& Arrays.equals(typesWithNode, m.getParameterTypes())
+				)
+				.findFirst()
+				.map(m -> {
+					m.setAccessible(true);
+					return m;
+				})
+				.map(m ->
+						(node, methodArgs) -> invokePowerNodeHelper(node, m, methodArgs, impl)
+				);
 	}
 
 	private Object invokePowerNodeHelper(Node node, Method powerNodeHelperMethod, Object[] methodArgs, Object impl) throws ReflectiveOperationException {
