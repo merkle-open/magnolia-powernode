@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.jcr.*;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
@@ -36,11 +35,11 @@ class PowerNodePropertyImpl {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private final PowerNodeService powerNodeService;
-	private final DefaultLanguageHelper defaultLanguageHelper;
+	private final LocalizedPropertyNameProvider localizedPropertyNameProvider;
 
-	PowerNodePropertyImpl(PowerNodeService powerNodeService, DefaultLanguageHelper defaultLanguageHelper) {
+	PowerNodePropertyImpl(PowerNodeService powerNodeService, LocalizedPropertyNameProvider localizedPropertyNameProvider) {
 		this.powerNodeService = powerNodeService;
-		this.defaultLanguageHelper = defaultLanguageHelper;
+		this.localizedPropertyNameProvider = localizedPropertyNameProvider;
 	}
 
 	/**
@@ -399,27 +398,13 @@ class PowerNodePropertyImpl {
 	}
 
 	private <T> T getLocalizedProperty(@Nonnull Node node, String name, T defaultValue, RepoBiFunction<Node, String, T> extractor, Locale locale) {
-		String suffix = StringUtils.EMPTY;
-		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
-			boolean isNotDefault = !equalsLanguage(locale, defaultLanguageHelper.getDefaultLanguage());
-			if (isNotDefault) {
-				suffix = "_" + locale.getLanguage();
-			}
-		}
-
 		if (StringUtils.isBlank(name)) {
 			return defaultValue;
 		}
-
-		String propName = name + suffix;
-		return getValueFromProp(node, propName, defaultValue, extractor);
-	}
-
-	private boolean equalsLanguage(@Nullable final Locale locale1, @Nullable final Locale locale2) {
-		return Objects.equals(
-				Optional.ofNullable(locale1).map(Locale::getLanguage),
-				Optional.ofNullable(locale2).map(Locale::getLanguage)
-		);
+		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
+			return getValueFromProp(node, localizedPropertyNameProvider.getLocalized(name, locale), defaultValue, extractor);
+		}
+		return getValueFromProp(node, name, defaultValue, extractor);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -43,14 +43,14 @@ public class PowerNodeService {
 	private final PowerNodePropertyImpl powerNodePropertyImpl;
 	private final RepositoryManager repositoryManager;
 
-	public PowerNodeService(DefaultLanguageHelper defaultLanguageHelper) {
+	public PowerNodeService(LocalizedPropertyNameProvider localizedPropertyNameProvider) {
 		this.powerNodeImpl = new PowerNodeImpl(this);
-		this.powerNodePropertyImpl = new PowerNodePropertyImpl(this, defaultLanguageHelper);
+		this.powerNodePropertyImpl = new PowerNodePropertyImpl(this, localizedPropertyNameProvider);
 		this.repositoryManager = Components.getComponent(RepositoryManager.class);
 	}
 
 	public PowerNodeService() {
-		this(new DefaultLanguageHelper());
+		this(Components.getComponent(LocalizedPropertyNameProvider.class));
 	}
 
 	/**

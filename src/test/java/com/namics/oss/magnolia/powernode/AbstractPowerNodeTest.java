@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 
 import java.util.Locale;
 
+import static org.mockito.ArgumentMatchers.any;
+
 public abstract class AbstractPowerNodeTest extends AbstractXmlRepositoryTest {
 
 	private static final String WEBSITE_WORKSPACE_TESTCASE_XML = "/repositoryxml/powernode-testcase-website-workspace.xml";
@@ -19,13 +21,13 @@ public abstract class AbstractPowerNodeTest extends AbstractXmlRepositoryTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		super.setUp();
-		DefaultLanguageHelper languageService = Mockito.mock(DefaultLanguageHelper.class);
-		Mockito.when(languageService.getDefaultLanguage()).thenReturn(Locale.GERMAN);
-		this.powerNodeService = new PowerNodeService(languageService);
 
 		SiteI18nContentSupport mockSiteI18nContentSupport = Mockito.mock(SiteI18nContentSupport.class);
 		Mockito.when(mockSiteI18nContentSupport.toI18NURI(Mockito.anyString())).thenAnswer(invocation -> invocation.getArguments()[0]);
+		Mockito.doReturn(Locale.GERMAN).when(mockSiteI18nContentSupport).getDefaultLocale();
 		ComponentsTestUtil.setInstance(I18nContentSupport.class, mockSiteI18nContentSupport);
+
+		this.powerNodeService = new PowerNodeService(new LanguageLocalizedPropertyNameProvider(mockSiteI18nContentSupport));
 	}
 
 	public String getRepositoryXmlPath() {
