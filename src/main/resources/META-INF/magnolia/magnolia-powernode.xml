@@ -16,7 +16,7 @@
 		</component>
 		<component>
 			<type>com.namics.oss.magnolia.powernode.LocalizedPropertyNameProvider</type>
-			<implementation>com.namics.oss.magnolia.powernode.LanguageLocalizedPropertyNameProvider</implementation>
+			<implementation>com.namics.oss.magnolia.powernode.LanguageTagLocalizedPropertyNameProvider</implementation>
 		</component>
 	</components>
 
