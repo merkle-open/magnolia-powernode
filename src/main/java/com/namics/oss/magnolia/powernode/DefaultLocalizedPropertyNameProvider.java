@@ -6,11 +6,11 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Objects;
 
-public class LanguageTagLocalizedPropertyNameProvider implements LocalizedPropertyNameProvider {
+public class DefaultLocalizedPropertyNameProvider implements LocalizedPropertyNameProvider {
 	private final I18nContentSupport i18nContentSupport;
 
 	@Inject
-	public LanguageTagLocalizedPropertyNameProvider(final  I18nContentSupport i18nContentSupport) {
+	public DefaultLocalizedPropertyNameProvider(final I18nContentSupport i18nContentSupport) {
 		this.i18nContentSupport = i18nContentSupport;
 	}
 
@@ -18,7 +18,7 @@ public class LanguageTagLocalizedPropertyNameProvider implements LocalizedProper
 	public String getLocalized(final String propertyName, final Locale locale) {
 		final boolean isDefault = Objects.equals(locale, i18nContentSupport.getDefaultLocale());
 		if (!isDefault) {
-			return propertyName + "_" + locale.toLanguageTag();
+			return propertyName + "_" + locale; // same as AbstractI18nContentSupport.getProperty(Node node, String name, Locale locale)
 		}
 		return propertyName;
 	}
