@@ -42,9 +42,11 @@ class PowerNodeImpl {
 	private static final String PATH_SEPARATOR = "/";
 
 	private final PowerNodeService powerNodeService;
+	private final LocalizedNameProvider localizedNameProvider;
 
-	PowerNodeImpl(PowerNodeService powerNodeService) {
+	PowerNodeImpl(PowerNodeService powerNodeService, LocalizedNameProvider localizedNameProvider) {
 		this.powerNodeService = powerNodeService;
+		this.localizedNameProvider = localizedNameProvider;
 	}
 
 	/**
@@ -210,6 +212,23 @@ class PowerNodeImpl {
 		}
 		if (node.hasNode(relPath)) {
 			Node child = node.getNode(relPath);
+			return Optional.of(powerNodeService.convertToPowerNode(child));
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * @see PowerNode#getNodeByName(String)
+	 */
+	@SuppressWarnings("unused")
+	private Optional<PowerNode> getNodeByName(@Nonnull Node node, String relPath, Locale locale) throws RepositoryException {
+		if (StringUtils.isBlank(relPath)) {
+			LOG.warn("Path is empty, cannot get Node.");
+			return Optional.empty();
+		}
+		final String localizedRelPath = localizedNameProvider.getLocalizedNodeName(node, relPath, locale);
+		if (node.hasNode(localizedRelPath)) {
+			Node child = node.getNode(localizedRelPath);
 			return Optional.of(powerNodeService.convertToPowerNode(child));
 		}
 		return Optional.empty();

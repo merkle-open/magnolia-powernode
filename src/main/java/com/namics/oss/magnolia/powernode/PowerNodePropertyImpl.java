@@ -35,11 +35,11 @@ class PowerNodePropertyImpl {
 	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private final PowerNodeService powerNodeService;
-	private final LocalizedPropertyNameProvider localizedPropertyNameProvider;
+	private final LocalizedNameProvider localizedNameProvider;
 
-	PowerNodePropertyImpl(PowerNodeService powerNodeService, LocalizedPropertyNameProvider localizedPropertyNameProvider) {
+	PowerNodePropertyImpl(PowerNodeService powerNodeService, LocalizedNameProvider localizedNameProvider) {
 		this.powerNodeService = powerNodeService;
-		this.localizedPropertyNameProvider = localizedPropertyNameProvider;
+		this.localizedNameProvider = localizedNameProvider;
 	}
 
 	/**
@@ -402,7 +402,7 @@ class PowerNodePropertyImpl {
 			return defaultValue;
 		}
 		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
-			return getValueFromProp(node, localizedPropertyNameProvider.getLocalized(node, name, locale), defaultValue, extractor);
+			return getValueFromProp(node, localizedNameProvider.getLocalizedPropertyName(node, name, locale), defaultValue, extractor);
 		}
 		return getValueFromProp(node, name, defaultValue, extractor);
 	}

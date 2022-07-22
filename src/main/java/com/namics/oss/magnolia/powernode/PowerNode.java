@@ -91,6 +91,14 @@ public interface PowerNode extends Node {
 	Optional<PowerNode> getNodeByName(String relPath);
 
 	/**
+	 * Implementation:  {@link PowerNodeImpl#getNodeByName(Node, String)}
+	 *
+	 * @param relPath name or relative path to node
+	 * @return optional of the node
+	 */
+	Optional<PowerNode> getNodeByName(String relPath, Locale locale);
+
+	/**
 	 * Implementation:  {@link PowerNodeImpl#overwriteOrCreateNode(Node, String, String)}
 	 *
 	 * @param relPath  path to create or override

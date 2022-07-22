@@ -9,21 +9,26 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LanguageLocalizedPropertyNameProvider implements LocalizedPropertyNameProvider {
+public class LanguageLocalizedNameProvider implements LocalizedNameProvider {
 	private final I18nContentSupport i18nContentSupport;
 
 	@Inject
-	public LanguageLocalizedPropertyNameProvider(final  I18nContentSupport i18nContentSupport) {
+	public LanguageLocalizedNameProvider(final  I18nContentSupport i18nContentSupport) {
 		this.i18nContentSupport = i18nContentSupport;
 	}
 
 	@Override
-	public String getLocalized(final Node node, final String propertyName, final Locale locale) {
+	public String getLocalizedPropertyName(@Nullable final Node node, final String propertyName, final Locale locale) {
 		final boolean isDefault = equalsLanguage(locale, i18nContentSupport.getDefaultLocale());
 		if (!isDefault) {
 			return propertyName + "_" + locale.getLanguage();
 		}
 		return propertyName;
+	}
+
+	@Override
+	public String getLocalizedNodeName(@Nullable final Node node, final String nodeName, final Locale locale) {
+		return getLocalizedPropertyName(node, nodeName, locale);
 	}
 
 	private boolean equalsLanguage(@Nullable final Locale locale1, @Nullable final Locale locale2) {

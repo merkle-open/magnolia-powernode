@@ -15,8 +15,8 @@
 			<implementation>com.namics.oss.magnolia.powernode.PowerNodeService</implementation>
 		</component>
 		<component>
-			<type>com.namics.oss.magnolia.powernode.LocalizedPropertyNameProvider</type>
-			<implementation>com.namics.oss.magnolia.powernode.DefaultLocalizedPropertyNameProvider</implementation>
+			<type>com.namics.oss.magnolia.powernode.LocalizedNameProvider</type>
+			<implementation>com.namics.oss.magnolia.powernode.DefaultLocalizedNameProvider</implementation>
 		</component>
 	</components>
 

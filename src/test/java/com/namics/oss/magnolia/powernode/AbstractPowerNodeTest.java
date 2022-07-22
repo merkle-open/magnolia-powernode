@@ -35,7 +35,7 @@ public abstract class AbstractPowerNodeTest extends AbstractXmlRepositoryTest {
 			return propertyName + "_" + locale.getLanguage();
 		}).when(mockI18NAuthoringSupport).deriveLocalisedPropertyName(any(), any());
 
-		this.powerNodeService = new PowerNodeService(new DefaultLocalizedPropertyNameProvider(mockI18nContentSupport, mockI18NAuthoringSupport));
+		this.powerNodeService = new PowerNodeService(new DefaultLocalizedNameProvider(mockI18nContentSupport, mockI18NAuthoringSupport));
 	}
 
 	public String getRepositoryXmlPath() {
