@@ -402,7 +402,7 @@ class PowerNodePropertyImpl {
 			return defaultValue;
 		}
 		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
-			return getValueFromProp(node, localizedPropertyNameProvider.getLocalized(name, locale), defaultValue, extractor);
+			return getValueFromProp(node, localizedPropertyNameProvider.getLocalized(node, name, locale), defaultValue, extractor);
 		}
 		return getValueFromProp(node, name, defaultValue, extractor);
 	}

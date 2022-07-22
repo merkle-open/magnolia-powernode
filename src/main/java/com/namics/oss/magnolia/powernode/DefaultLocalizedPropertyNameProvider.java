@@ -4,6 +4,7 @@ import info.magnolia.cms.i18n.I18nContentSupport;
 import info.magnolia.ui.api.i18n.I18NAuthoringSupport;
 
 import javax.inject.Inject;
+import javax.jcr.Node;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -20,7 +21,7 @@ public class DefaultLocalizedPropertyNameProvider implements LocalizedPropertyNa
 	}
 
 	@Override
-	public String getLocalized(final String propertyName, final Locale locale) {
+	public String getLocalized(final Node node, final String propertyName, final Locale locale) {
 		final boolean isDefault = Objects.equals(locale, i18nContentSupport.getDefaultLocale());
 		if (!isDefault) {
 			return i18NAuthoringSupport.deriveLocalisedPropertyName(propertyName, locale);
