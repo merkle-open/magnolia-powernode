@@ -296,8 +296,7 @@ class PowerNodeImpl {
 				return Optional.of(powerNodeService.convertToPowerNode((Node) ancestor));
 			}
 		} catch (ItemNotFoundException e) {
-			LOG.info("Ancestor at level '{}' not found", level);
-			LOG.debug("Ancestor at level '{}' not found", level, e);
+			LOG.error("Ancestor at level '"+level+"' not found", e);
 		}
 		return Optional.empty();
 	}
@@ -487,8 +486,7 @@ class PowerNodeImpl {
 					}
 					return false;
 				} catch (RepositoryException e) {
-					LOG.error("Cannot get name from node.");
-					LOG.debug("Cannot get name from node.", e);
+					LOG.error("Cannot get name from node.", e);
 					throw PowerNodeException.wrap(e, PowerNodeException.Type.JCR_REPOSITORY);
 				}
 			};

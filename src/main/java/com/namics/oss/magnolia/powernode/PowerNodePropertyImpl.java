@@ -54,7 +54,7 @@ class PowerNodePropertyImpl {
 			}
 			return node.hasProperty(name);
 		} catch (RepositoryException e) {
-			LOG.debug("Could not check if node has property {}", name, e);
+			LOG.error("Could not check if node has property "+name, e);
 		}
 		return false;
 	}
@@ -103,8 +103,7 @@ class PowerNodePropertyImpl {
 			}
 			return Map.copyOf(propertyMap);
 		} catch (RepositoryException e) {
-			LOG.trace("Could not collect node properties", e);
-			LOG.warn("Could not collect node properties");
+			LOG.error("Could not collect node properties", e);
 		}
 		return Map.of();
 	}
@@ -119,7 +118,7 @@ class PowerNodePropertyImpl {
 				return Optional.of(node.getProperty(propName));
 			}
 		} catch (RepositoryException e) {
-			LOG.debug("Could not retrieve property {}", propName, e);
+			LOG.error("Could not retrieve property "+propName, e);
 		}
 		return Optional.empty();
 	}
@@ -273,8 +272,7 @@ class PowerNodePropertyImpl {
 				return Collections.singletonList((T) extractor.apply(property.getValue()));
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Could not get value list from node '{}', property '{}', type '{}' " + node, name, type);
-			LOG.trace("Could not get value list from node '{}', property '{}', type '{}' " + node, name, type, e);
+			LOG.error("Could not get value list from node '"+node+"', property '"+name+"', type '"+type+"'", e);
 		}
 		return Collections.emptyList();
 	}
@@ -291,8 +289,7 @@ class PowerNodePropertyImpl {
 			try {
 				property.remove();
 			} catch (RepositoryException e) {
-				LOG.error("Could not remove property '{}' from node '{}'", name, node);
-				LOG.debug("Could not remove property '{}' from node '{}'", name, node, e);
+				LOG.error("Could not remove property '"+name+"' from node '"+node+"'", e);
 				throw PowerNodeException.wrap(e, PowerNodeException.Type.JCR_REPOSITORY);
 			}
 		});
@@ -373,8 +370,7 @@ class PowerNodePropertyImpl {
 				throw new PowerNodeException(PowerNodeException.Type.JCR_REPOSITORY, "Value type not supported: '{}'", type.getName());
 			}
 		} catch (RepositoryException e) {
-			LOG.error("Can't create value from object '{}' with type '{}", value, type);
-			LOG.debug("Can't create value from object '{}' with type '{}", value, type, e);
+			LOG.error("Can't create value from object '"+value+"' with type '"+type+"'", e);
 		}
 		return val;
 	}
@@ -391,8 +387,7 @@ class PowerNodePropertyImpl {
 						.orElse(defaultValue);
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Can't read value '{}' of the Node '{}' will return default value", name, node);
-			LOG.trace("Can't read value '{}' of the Node '{}' will return default value", name, node, e);
+			LOG.error("Can't read value '"+name+"' of the Node '"+node+"' will return default value", e);
 		}
 		return defaultValue;
 	}
@@ -413,8 +408,7 @@ class PowerNodePropertyImpl {
 			try {
 				return type.cast(extractor.apply(value));
 			} catch (RepositoryException | ClassCastException e) {
-				LOG.error("Could not get value");
-				LOG.debug("Could not get value", e);
+				LOG.error("Could not get value", e);
 				throw PowerNodeException.wrap(e, PowerNodeException.Type.JCR_REPOSITORY);
 			}
 		};
@@ -427,8 +421,7 @@ class PowerNodePropertyImpl {
 				return extractor.apply(node, name);
 			}
 		} catch (RepositoryException e) {
-			LOG.warn("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node, e.getMessage());
-			LOG.trace("Can't read value '{}' of the Node '{}' will return default value: '{}'", name, node, e.getMessage(), e);
+			LOG.error("Can't read value '"+name+"' of the Node '"+node+"' will return default value", e);
 		}
 		return defaultValue;
 	}
@@ -525,7 +518,7 @@ class PowerNodePropertyImpl {
 					return value.getString();
 			}
 		} catch (RuntimeException | RepositoryException | URISyntaxException e) {
-			LOG.warn("Could not cast property", e);
+			LOG.error("Could not cast property", e);
 		}
 		return StringUtils.EMPTY;
 	}
@@ -551,7 +544,7 @@ class PowerNodePropertyImpl {
 					return String.class;
 			}
 		} catch (RuntimeException e) {
-			LOG.warn("Could not find type of value", e);
+			LOG.error("Could not find type of value", e);
 		}
 		return String.class;
 	}
@@ -561,8 +554,7 @@ class PowerNodePropertyImpl {
 		try {
 			return LinkUtil.convertLinksFromUUIDPattern(stringValue);
 		} catch (LinkException e) {
-			LOG.warn("Cannot rewrite uuid links. return original text: {}", stringValue);
-			LOG.trace("Cannot rewrite uuid links. return original text: {}", stringValue, e);
+			LOG.error("Cannot rewrite uuid links. return original text: "+ stringValue, e);
 		}
 		return stringValue;
 	}
@@ -601,8 +593,7 @@ class PowerNodePropertyImpl {
 			try {
 				return !StringUtils.startsWithAny(property.getName(), NodeTypes.JCR_PREFIX, NodeTypes.MGNL_PREFIX);
 			} catch (RepositoryException e) {
-				LOG.trace("Could not retrieve property name.", e);
-				LOG.error("Could not retrieve property name.");
+				LOG.error("Could not retrieve property name.", e);
 			}
 			return false;
 		}
@@ -618,8 +609,7 @@ class PowerNodePropertyImpl {
 					}
 					return getValueType(prop.getValue()).isAssignableFrom(type);
 				} catch (RepositoryException e) {
-					LOG.debug("Could not get property value", e);
-					LOG.error("Could not get property value");
+					LOG.error("Could not get property value", e);
 				}
 			}
 			return false;

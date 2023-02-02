@@ -129,83 +129,56 @@ public class PowerNodeService {
 	}
 
 	public Optional<PowerNode> getNodeByUuid(String uuid, Session session) {
-		if (isSessionInvalid(session)) {
-			return Optional.empty();
-		}
-		if (!isValidUuid(uuid)) {
-			LOG.error("UUID '{}' is not a valid UUID.", uuid);
-			return Optional.empty();
-		}
 		try {
-			return Optional.of(convertToPowerNode(session.getNodeByIdentifier(uuid)));
+			if (isValidUuid(uuid)) {
+				return Optional.of(convertToPowerNode(session.getNodeByIdentifier(uuid)));
+			}
+			LOG.error("UUID '{}' is not a valid UUID.", uuid);
 		} catch (RepositoryException e) {
-			var workspaceName = session.getWorkspace().getName();
-			LOG.error("Could not get node with uuid '{}' from workspace '{}'", uuid, workspaceName);
-			LOG.debug("Could not get node with uuid '{}' from workspace '{}'", uuid, workspaceName, e);
+			LOG.error("Could not get node with uuid '" + uuid + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
 	}
 
 	public Optional<PowerNode> getNodeByPath(String path, Session session) {
-		if (isSessionInvalid(session)) {
-			return Optional.empty();
-		}
-		if (StringUtils.isBlank(path)) {
-			LOG.error("Path ('{}') not specified.", path);
-			return Optional.empty();
-		}
 		try {
-			return Optional.of(convertToPowerNode(session.getNode(path)));
-		} catch (PathNotFoundException e) {
-			var workspaceName = session.getWorkspace().getName();
-			LOG.error("Node path '{}' not found in workspace '{}'", path, workspaceName);
-			LOG.debug("Node path '{}' not found in workspace '{}'", path, workspaceName, e);
+			if (!StringUtils.isBlank(path)) {
+				return Optional.of(convertToPowerNode(session.getNode(path)));
+			}
+			LOG.error("Path ('{}') not specified.", path);
 		} catch (RepositoryException e) {
-			var workspaceName = session.getWorkspace().getName();
-			LOG.error("Could not get node with path '{}' from workspace '{}'", path, workspaceName);
-			LOG.debug("Could not get node with path '{}' from workspace '{}'", path, workspaceName, e);
+			LOG.error("Could not get node with path '" + path + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
 	}
 
-	private boolean isSessionInvalid(Session session) {
-		if (session == null || !session.isLive()) {
-			LOG.error("JCR Session must not be null and has to be live");
-			return true;
-		}
-		return false;
-	}
-
 	public Optional<PowerNode> getWorkspaceRootNode(Session session) {
-		if (isSessionInvalid(session)) {
-			return Optional.empty();
-		}
 		try {
 			return Optional.of(convertToPowerNode(session.getRootNode()));
 		} catch (RepositoryException e) {
-			var workspaceName = session.getWorkspace().getName();
-			LOG.error("Could not get root node from workspace '{}'", workspaceName);
-			LOG.debug("Could not get root node from workspace '{}'", workspaceName, e);
+			LOG.error("Could not get root node from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
 	}
 
 	public boolean nodeExists(String path, Session session) {
-		if (isSessionInvalid(session)) {
-			return false;
-		}
-		if (StringUtils.isBlank(path)) {
-			LOG.error("Path ('{}') not specified.", path);
-			return false;
-		}
 		try {
-			return session.nodeExists(path);
+			if (!StringUtils.isBlank(path)) {
+				return session.nodeExists(path);
+			}
+			LOG.error("Path ('{}') not specified.", path);
 		} catch (RepositoryException e) {
-			var workspaceName = session.getWorkspace().getName();
-			LOG.error("Could not get node with path '{}' from workspace '{}'", path, workspaceName);
-			LOG.debug("Could not get node with path '{}' from workspace '{}'", path, workspaceName, e);
+			LOG.error("Could not get node with path '" + path + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return false;
+	}
+
+	private String getWorkspace(final Session session) {
+		try {
+			return session.getWorkspace().getName();
+		} catch (Exception e) {
+			return "undefined";
+		}
 	}
 
 	/**
@@ -256,10 +229,9 @@ public class PowerNodeService {
 		try {
 			return Optional.of(repositoryManager.getSystemSession(workspaceName));
 		} catch (RepositoryException e) {
-			LOG.error("Could not get system session for workspace {}", workspaceName);
-			LOG.debug("Could not get system session for workspace {}", workspaceName, e);
+			LOG.error("Could not get system session for workspace " + workspaceName, e);
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 
 	/**
@@ -275,10 +247,9 @@ public class PowerNodeService {
 		try {
 			return Optional.of(MgnlContext.getJCRSession(workspaceName));
 		} catch (RepositoryException e) {
-			LOG.error("Could not get magnolia context session for workspace {}", workspaceName);
-			LOG.debug("Could not get magnolia context session for workspace {}", workspaceName, e);
+			LOG.error("Could not get magnolia context session for workspace " + workspaceName, e);
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 
 	/**
@@ -288,15 +259,14 @@ public class PowerNodeService {
 	 * @return true for valid UUID, false otherwise
 	 */
 	public boolean isValidUuid(String uuid) {
-		if (StringUtils.isBlank(uuid)) {
-			return false;
-		}
 		try {
-			return UUID.fromString(uuid).toString().equals(uuid);
+			if (!StringUtils.isBlank(uuid)) {
+				return UUID.fromString(uuid).toString().equals(uuid);
+			}
 		} catch (IllegalArgumentException e) {
 			LOG.trace("String '{}' is not a valid UUID", uuid, e);
-			return false;
 		}
+		return false;
 	}
 
 	/**
@@ -312,8 +282,7 @@ public class PowerNodeService {
 		try {
 			NodeTypes.Created.set(node);
 		} catch (RepositoryException e) {
-			LOG.error("Could not set properties '{}' and '{}'", NodeTypes.Created.NAME, NodeTypes.Created.CREATED_BY);
-			LOG.debug("Could not set properties '{}' and '{}'", NodeTypes.Created.NAME, NodeTypes.Created.CREATED_BY, e);
+			LOG.error("Could not set properties '" + NodeTypes.Created.NAME + "' and '" + NodeTypes.Created.CREATED_BY + "'", e);
 		}
 	}
 
@@ -329,9 +298,7 @@ public class PowerNodeService {
 		try {
 			NodeTypes.LastModified.update(node);
 		} catch (RepositoryException e) {
-			LOG.error("Could not set properties '{}' and '{}'", NodeTypes.LastModified.NAME, NodeTypes.LastModified.LAST_MODIFIED_BY);
-			LOG.debug("Could not set properties '{}' and '{}'", NodeTypes.LastModified.NAME, NodeTypes.LastModified.LAST_MODIFIED_BY, e);
+			LOG.error("Could not set properties '" + NodeTypes.LastModified.NAME + "' and '" + NodeTypes.LastModified.LAST_MODIFIED_BY + "'", e);
 		}
 	}
-
 }
