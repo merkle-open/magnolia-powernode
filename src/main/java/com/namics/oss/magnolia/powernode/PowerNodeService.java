@@ -134,7 +134,7 @@ public class PowerNodeService {
 				return Optional.of(convertToPowerNode(session.getNodeByIdentifier(uuid)));
 			}
 			LOG.error("UUID '{}' is not a valid UUID.", uuid);
-		} catch (RepositoryException e) {
+		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get node with uuid '" + uuid + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
@@ -146,7 +146,7 @@ public class PowerNodeService {
 				return Optional.of(convertToPowerNode(session.getNode(path)));
 			}
 			LOG.error("Path ('{}') not specified.", path);
-		} catch (RepositoryException e) {
+		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get node with path '" + path + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
@@ -155,7 +155,7 @@ public class PowerNodeService {
 	public Optional<PowerNode> getWorkspaceRootNode(Session session) {
 		try {
 			return Optional.of(convertToPowerNode(session.getRootNode()));
-		} catch (RepositoryException e) {
+		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get root node from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return Optional.empty();
@@ -167,7 +167,7 @@ public class PowerNodeService {
 				return session.nodeExists(path);
 			}
 			LOG.error("Path ('{}') not specified.", path);
-		} catch (RepositoryException e) {
+		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get node with path '" + path + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
 		return false;
