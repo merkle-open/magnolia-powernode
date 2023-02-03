@@ -134,6 +134,8 @@ public class PowerNodeService {
 				return Optional.of(convertToPowerNode(session.getNodeByIdentifier(uuid)));
 			}
 			LOG.error("UUID '{}' is not a valid UUID.", uuid);
+		} catch (ItemNotFoundException e){
+			//return empty
 		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get node with uuid '" + uuid + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
@@ -146,6 +148,8 @@ public class PowerNodeService {
 				return Optional.of(convertToPowerNode(session.getNode(path)));
 			}
 			LOG.error("Path ('{}') not specified.", path);
+		} catch (PathNotFoundException e) {
+			//return empty
 		} catch (RepositoryException | NullPointerException e) {
 			LOG.error("Could not get node with path '" + path + "' from workspace '" + getWorkspace(session) + "'", e);
 		}
