@@ -375,12 +375,14 @@ class PowerNodePropertyImpl {
 		return val;
 	}
 
-
 	private <T> T getInheritedValueFromProp(@Nonnull Node node, String name, T defaultValue, RepoBiFunction<Node, String, T> extractor) {
 		String propName = StringUtils.defaultString(name);
 		try {
 			if (node.hasProperty(propName)) {
 				return extractor.apply(node, name);
+			} else if (node.getDepth() == 0) {
+				LOG.trace("Root node doesn't have a parent - returning default value");
+				return defaultValue;
 			} else {
 				return Optional.of(node.getParent())
 						.map(parent -> getInheritedValueFromProp(parent, name, defaultValue, extractor))
