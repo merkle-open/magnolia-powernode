@@ -27,7 +27,7 @@ Advantages:
 <dependency>
     <groupId>com.namics.oss.magnolia</groupId>
     <artifactId>magnolia-powernode</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
 </dependency>
 ```
 * Import Spring Configuration:
