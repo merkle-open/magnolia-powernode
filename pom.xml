@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.namics.oss.magnolia</groupId>
-    <artifactId>magnolia-powernode</artifactId>
-    <version>1.0.13-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <artifactId>magnolia-powernode-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
     <description>The Magnolia PowerNode provides a special wrapper for JCR nodes with extended functionality.
@@ -22,38 +22,48 @@
 
     <developers>
         <developer>
-            <name>Namics Magnolia</name>
-            <email>magnolia@namics.com</email>
-            <organization>Namics AG</organization>
-            <organizationUrl>http://www.namics.com</organizationUrl>
+            <name>Merkle Magnolia</name>
+            <email>magnolia@merkle.com</email>
+            <organization>Merkle DACH</organization>
+            <organizationUrl>https://merkleinc.ch</organizationUrl>
         </developer>
     </developers>
 
-    <properties>
-        <magnolia.version>6.2.6</magnolia.version>
+    <modules>
+        <module>powernode-generator</module>
+        <module>powernode-base</module>
+        <module>powernode</module>
+    </modules>
 
-        <spring.version>5.2.7.RELEASE</spring.version>
+    <properties>
+        <magnolia.version>6.2.39</magnolia.version>
+        <spring.version>5.3.30</spring.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <javax.inject.version>1</javax.inject.version>
+        <java-poet.version>1.13.0</java-poet.version>
 
         <!-- Testing -->
-        <junit.version>5.8.2</junit.version>
-        <junit.mockito.version>2.27.0</junit.mockito.version>
-        <junit.assertj.version>3.12.2</junit.assertj.version>
+        <junit.version>5.10.0</junit.version>
+        <mockito.version>5.6.0</mockito.version>
+        <hamcrest.version>2.2</hamcrest.version>
 
         <!-- Maven Plugins -->
-        <mvn.compiler.plugin.version>3.8.1</mvn.compiler.plugin.version>
-        <mvn.source.plugin.version>3.1.0</mvn.source.plugin.version>
-        <mvn.surefire.plugin.version>2.22.2</mvn.surefire.plugin.version>
-        <mvn.jacoco.plugin.version>0.8.5</mvn.jacoco.plugin.version>
+        <mvn.compiler.plugin.version>3.10.1</mvn.compiler.plugin.version>
+        <mvn.source.plugin.version>3.2.1</mvn.source.plugin.version>
+        <mvn.javadoc.version>3.5.0</mvn.javadoc.version>
+        <mvn.surefire.plugin.version>3.0.0-M7</mvn.surefire.plugin.version>
+        <mvn.gpg.plugin.version>3.0.1</mvn.gpg.plugin.version>
+        <mvn.nexus-staging.plugin.version>1.6.13</mvn.nexus-staging.plugin.version>
+        <mvn.exec.plugin.version>3.1.0</mvn.exec.plugin.version>
+        <mvn.build-helper.plugin.version>3.4.0</mvn.build-helper.plugin.version>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javaVersion>11</javaVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Importing depMgt -->
             <dependency>
                 <groupId>info.magnolia.bundle</groupId>
                 <artifactId>magnolia-bundle-parent</artifactId>
@@ -62,108 +72,72 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>info.magnolia.ui</groupId>
-                <artifactId>magnolia-ui-api</artifactId>
+                <groupId>com.namics.oss.magnolia</groupId>
+                <artifactId>magnolia-powernode-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.namics.oss.magnolia</groupId>
+                <artifactId>magnolia-powernode-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- testing -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>info.magnolia</groupId>
+                <artifactId>magnolia-core</artifactId>
                 <version>${magnolia.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <type>test-jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- MAGNOLIA DEPENDENCIES -->
-        <dependency>
-            <groupId>info.magnolia</groupId>
-            <artifactId>magnolia-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.magnolia</groupId>
-            <artifactId>magnolia-rendering</artifactId>
-            <scope>provided</scope>
-            <!-- required to implement PowerNodeArgumentResolver -->
-        </dependency>
-        <dependency>
-            <groupId>info.magnolia.ui</groupId>
-            <artifactId>magnolia-ui-api</artifactId>
-        </dependency>
-
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Others -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet-api.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
         </dependency>
 
-        <!-- TESTING DEPENDENCIES -->
+        <!-- testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${junit.mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${junit.mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>info.magnolia</groupId>
-            <artifactId>magnolia-core</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>info.magnolia.site</groupId>
-            <artifactId>magnolia-site</artifactId>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -181,41 +155,11 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${mvn.source.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${mvn.surefire.plugin.version}</version>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${mvn.jacoco.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
+        <!-- default resources configuration which will filter your module descriptors -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -256,9 +200,9 @@
     </distributionManagement>
 
     <scm>
-        <url>https://github.com/namics/magnolia-powernode</url>
-        <connection>scm:git:git@github.com:namics/magnolia-powernode.git</connection>
-        <developerConnection>scm:git:git@github.com:namics/magnolia-powernode.git</developerConnection>
+        <url>https://github.com/merkle-open/magnolia-powernode</url>
+        <connection>scm:git:git@github.com:merkle-open/magnolia-powernode.git</connection>
+        <developerConnection>scm:git:git@github.com:merkle-open/magnolia-powernode.git</developerConnection>
     </scm>
 
     <profiles>
@@ -268,8 +212,26 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${mvn.source.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/generator/**</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.1</version>
+                        <version>${mvn.javadoc.version}</version>
                         <configuration>
                             <failOnError>false</failOnError>
                         </configuration>
@@ -284,21 +246,8 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${mvn.gpg.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -319,7 +268,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>${mvn.nexus-staging.plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
