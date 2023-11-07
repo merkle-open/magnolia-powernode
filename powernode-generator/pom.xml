@@ -23,11 +23,6 @@
         </dependency>
 
         <dependency>
-            <groupId>info.magnolia</groupId>
-            <artifactId>magnolia-rendering</artifactId>
-            <!-- required to implement PowerNodeArgumentResolver -->
-        </dependency>
-        <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>javapoet</artifactId>
             <version>${java-poet.version}</version>

@@ -17,23 +17,24 @@
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.namics.oss.magnolia</groupId>
-            <artifactId>magnolia-powernode-generator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.namics.oss.magnolia</groupId>
-            <artifactId>magnolia-powernode-base</artifactId>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${mvn.exec.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.namics.oss.magnolia</groupId>
+                        <artifactId>magnolia-powernode-generator</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.namics.oss.magnolia</groupId>
+                        <artifactId>magnolia-powernode-base</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>generate-powernode-classes</id>
@@ -42,6 +43,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
+                            <includePluginDependencies>true</includePluginDependencies>
                             <mainClass>com.merkle.oss.magnolia.powernode.generator.SourceGenerator</mainClass>
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources</argument>
