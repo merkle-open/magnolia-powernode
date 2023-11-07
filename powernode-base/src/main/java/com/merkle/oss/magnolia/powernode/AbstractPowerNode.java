@@ -145,8 +145,12 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 
 	@Override
 	public boolean equals(final Object other) {
-		if (other instanceof Item) {
-			return getOrThrow(wrappedNode -> wrappedNode.isSame((Item) other));
+		if (other instanceof AbstractPowerNode) {
+			final AbstractPowerNode<?> otherPowerNode = (AbstractPowerNode<?>) other;
+			return getOrThrow(wrappedNode ->
+					Objects.equals(wrappedNode.getIdentifier(), otherPowerNode.getIdentifier()) &&
+					Objects.equals(getWorkspaceName(), otherPowerNode.getWorkspaceName())
+			);
 		}
 		return false;
 	}
@@ -155,7 +159,11 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 	public int hashCode() {
 		return getOrThrow(wrappedNode -> Objects.hash(
 				wrappedNode.getIdentifier(),
-				wrappedNode.getSession().getWorkspace().getName()
+				getWorkspaceName()
 		));
+	}
+
+	private String getWorkspaceName() throws RepositoryException{
+		return getWrappedNode().getSession().getWorkspace().getName();
 	}
 }
