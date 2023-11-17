@@ -17,6 +17,10 @@
 			<implementation>com.merkle.oss.magnolia.powernode.NodeService</implementation>
 		</component>
 		<component>
+			<type>com.merkle.oss.magnolia.powernode.PowerNodeDecorator</type>
+			<implementation>com.merkle.oss.magnolia.powernode.PowerNodeDecorator</implementation>
+		</component>
+		<component>
 			<type>com.merkle.oss.magnolia.powernode.LocalizedNameProvider</type>
 			<implementation>com.merkle.oss.magnolia.powernode.magnolia.MagnoliaDefaultLocalizedNameProvider</implementation>
 		</component>
@@ -27,10 +31,6 @@
 		<component>
 			<type>com.merkle.oss.magnolia.powernode.ValueConverter$Factory</type>
 			<implementation>com.merkle.oss.magnolia.powernode.magnolia.MagnoliaValueConverter$Factory</implementation>
-		</component>
-		<component>
-			<type>com.merkle.oss.magnolia.powernode.PowerNodeArgumentResolver</type>
-			<implementation>com.merkle.oss.magnolia.powernode.PowerNodeArgumentResolver</implementation>
 		</component>
 	</components>
 

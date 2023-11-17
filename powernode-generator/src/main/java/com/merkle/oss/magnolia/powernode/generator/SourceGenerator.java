@@ -15,7 +15,7 @@ public class SourceGenerator {
 	private final Set<ClassGenerator> classGenerators = Set.of(
 			new PowerNodeClassGenerator(),
 			new PowerNodeDecoratorClassGenerator(),
-			new PowerNodeArgumentResolverClassGenerator(),
+			new DelegatingPowerNodeArgumentResolverFactoryClassGenerator(),
 			new PowerNodeConfigurationClassGenerator(),
 			new PowerNodeServiceClassGenerator()
 	);

@@ -18,7 +18,6 @@ public class PowerNodeConfigurationClassGenerator implements ClassGenerator {
 	public static final ClassName CLASS_NAME = ClassName.get(BasePowerNodeConfiguration.class.getPackageName(), "PowerNodeConfiguration");
 	private static final Set<ClassName> GUICE_DELEGATE_BEANS = Set.of(
 			PowerNodeDecoratorClassGenerator.CLASS_NAME,
-			PowerNodeArgumentResolverClassGenerator.CLASS_NAME,
 			PowerNodeServiceClassGenerator.CLASS_NAME
 	);
 
