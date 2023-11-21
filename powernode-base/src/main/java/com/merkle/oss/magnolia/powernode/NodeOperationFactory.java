@@ -95,14 +95,7 @@ public class NodeOperationFactory {
 		final Provider<String> nodeTypeProvider = () -> Optional.ofNullable(nodeType).orElseGet(() ->
 				nodeService.getOrThrow(() -> context.getPrimaryNodeType().getName())
 		);
-		return nodeService
-				.getChild(context, relativePath)
-				.or(() ->
-						nodeService.get(() -> context.addNode(relativePath, nodeTypeProvider.get()))
-				)
-				.orElseThrow(() ->
-						new NullPointerException("Couldn't create "+nodeService.getOrThrow(context::getPath)+" "+relativePath)
-				);
+		return nodeService.getOrAddChild(context, nodeTypeProvider.get(), relativePath);
 	}
 
 	public NodeOperation removeNode(final String relativePath) {
