@@ -149,6 +149,24 @@ class NodeServiceTest {
 	}
 
 	@Test
+	void getOrAddChild() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("node", "someNodeType");
+		assertEquals(
+				"/node/child/grandchild",
+				nodeService.getOrAddChild(node, NodeTypes.ContentNode.NAME, "child/grandchild").getPath()
+		);
+	}
+
+	@Test
+	void getOrAddChild_localized() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("node", "someNodeType");
+		assertEquals(
+				"/node/child_fr-CA/grandchild_fr-CA",
+				nodeService.getOrAddChild(node, NodeTypes.ContentNode.NAME, "child/grandchild", Locale.CANADA_FRENCH).getPath()
+		);
+	}
+
+	@Test
 	void getChild() throws RepositoryException {
 		final Node node = session.getRootNode().addNode("node", "someNodeType");
 		final Node child = node.addNode("child", "someNodeType");

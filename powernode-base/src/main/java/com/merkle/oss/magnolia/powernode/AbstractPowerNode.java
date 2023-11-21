@@ -4,7 +4,6 @@ import info.magnolia.jcr.decoration.ContentDecoratorNodeWrapper;
 import info.magnolia.jcr.util.NodeTypes;
 
 import javax.annotation.Nullable;
-import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
@@ -63,6 +62,17 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 
 	public void move(final Node newParent) {
 		nodeService.move(getWrappedNode(), newParent);
+	}
+
+	public Node getOrAddChild(final String relPath, final String primaryNodeTypeName) {
+		return nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath);
+	}
+	/**
+	 * Creates child by localizing all relative path names.<br>
+	 * e.g. /node1/child_de/grandchild_de
+	 */
+	public Node getOrAddChild(final String relPath, final String primaryNodeTypeName, final Locale locale) {
+		return nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath, locale);
 	}
 
 	public Optional<N> getChild(final String relativePath) {

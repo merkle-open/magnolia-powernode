@@ -141,6 +141,27 @@ public class NodeService {
 		}
 	}
 
+	public Node getOrAddChild(final Node node, @Nullable final String primaryNodeTypeName, final String relativePath) {
+		final String[] relativePaths = relativePath.split("/", 2);
+		final Node childNode = getOrAddChildInternally(node, primaryNodeTypeName, relativePaths[0]);
+		if(relativePaths.length > 1) {
+			return getOrAddChild(childNode, primaryNodeTypeName, relativePaths[1]);
+		}
+		return childNode;
+	}
+	public Node getOrAddChild(final Node node, @Nullable final String primaryNodeTypeName, final String relativePath, final Locale locale) {
+		final String[] relativePaths = relativePath.split("/", 2);
+		final Node childNode = localizeNode(node, relativePaths[0], locale, localizedChildNodeName -> getOrAddChildInternally(node, primaryNodeTypeName, localizedChildNodeName));
+		if(relativePaths.length > 1) {
+			return getOrAddChild(childNode, primaryNodeTypeName, relativePaths[1], locale);
+		}
+		return childNode;
+	}
+
+	private Node getOrAddChildInternally(final Node node, @Nullable final String primaryNodeTypeName, final String childName) {
+		return getChild(node, childName).orElseGet(() -> getOrThrow(() -> node.addNode(childName, primaryNodeTypeName)));
+	}
+
 	/**
      * Gets child by localizing all relative path names.<br>
      * e.g. /node1/child_de/grandchild_de
