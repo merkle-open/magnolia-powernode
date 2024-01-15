@@ -254,7 +254,22 @@ class NodeServiceTest {
 				nodeService.getAncestor(grandChild, new NodeTypePredicate("someNodeType"))
 		);
 		assertTrue(nodeService.getAncestor(grandChild, new NodeTypePredicate("someNonExistingNodeType")).isEmpty());
+	}
 
+	@Test
+	void getAncestorOrSelf() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("node", "someNodeType");
+		final Node child = node.addNode("child", "someOtherNodeType");
+		final Node grandChild = child.addNode("grandChild", "someNodeType");
+		assertEquals(
+				Optional.of(child),
+				nodeService.getAncestorOrSelf(grandChild, new NodeTypePredicate("someOtherNodeType"))
+		);
+		assertEquals(
+				Optional.of(grandChild),
+				nodeService.getAncestorOrSelf(grandChild, new NodeTypePredicate("someNodeType"))
+		);
+		assertTrue(nodeService.getAncestorOrSelf(grandChild, new NodeTypePredicate("someNonExistingNodeType")).isEmpty());
 	}
 
 	@Test

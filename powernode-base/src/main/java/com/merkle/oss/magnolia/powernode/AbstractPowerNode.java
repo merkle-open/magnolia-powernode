@@ -115,6 +115,10 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 		return nodeService.getAncestor(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
 	}
 
+	public Optional<N> getAncestorOrSelf(final Predicate<N> predicate) {
+		return nodeService.getAncestorOrSelf(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
+	}
+
 	//Override due to link uuid conversion (see ValueConverter)
 	@Override
 	public Property setProperty(final String propertyName, @Nullable final String value) {

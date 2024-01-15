@@ -232,6 +232,13 @@ public class NodeService {
 		);
 	}
 
+	public Optional<Node> getAncestorOrSelf(final Node node, final Predicate<Node> predicate) {
+		if(predicate.test(node)) {
+			return Optional.of(node);
+		}
+		return getAncestor(node, predicate);
+	}
+
 	public boolean hasProperty(final Node node, final String propertyName) {
 		return getOrThrow(() -> node.hasProperty(propertyName));
 	}
