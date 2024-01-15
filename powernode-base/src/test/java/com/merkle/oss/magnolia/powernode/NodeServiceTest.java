@@ -8,7 +8,6 @@ import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 import info.magnolia.test.ComponentsTestUtil;
-import info.magnolia.test.mock.jcr.MockSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -23,7 +22,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -45,33 +43,6 @@ class NodeServiceTest {
 				jcrSessionProvider,
 				new PropertyService(valueFactory -> new ValueConverter(valueFactory, ZoneId::systemDefault))
 		);
-	}
-
-	@Test
-	void run() {
-		final RuntimeRepositoryException exception = assertThrows(RuntimeRepositoryException.class, () -> nodeService.run(() -> {
-			throw new RepositoryException("some repo exception");
-		}));
-		assertEquals("some repo exception", exception.getMessage());
-	}
-
-	@Test
-	void getOrThrow() {
-		final RuntimeRepositoryException exception = assertThrows(RuntimeRepositoryException.class, () -> nodeService.getOrThrow(() -> {
-			throw new RepositoryException("some repo exception");
-		}));
-		assertEquals("some repo exception", exception.getMessage());
-
-		assertEquals(42, nodeService.getOrThrow(() -> 42));
-	}
-
-	@Test
-	void get() {
-		assertTrue(nodeService.get(() -> {
-			throw new RepositoryException("some repo exception");
-		}).isEmpty());
-
-		assertEquals(Optional.of(42), nodeService.get(() -> 42));
 	}
 
 	@Test

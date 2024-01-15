@@ -1,25 +1,20 @@
 package com.merkle.oss.magnolia.powernode;
 
-import info.magnolia.jcr.RuntimeRepositoryException;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.NodeUtil;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.jcr.*;
-import java.lang.invoke.MethodHandles;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class NodeService {
-	private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+public class NodeService extends RepositoryExceptionDelegator {
 	private final LocalizedNameProvider localizedNameProvider;
 	private final NodeNameHelper nodeNameHelper;
 	private final JcrSessionProvider jcrSessionProvider;
@@ -36,38 +31,6 @@ public class NodeService {
 		this.nodeNameHelper = nodeNameHelper;
 		this.jcrSessionProvider = jcrSessionProvider;
 		this.propertyService = propertyService;
-	}
-
-	public void run(final RepositoryRunnable runnable) {
-		getOrThrow(() -> {
-			runnable.run();
-			return null;
-		});
-	}
-
-	public <T> T getOrThrow(final RepositoryProvider<T> provider) {
-		try {
-			return provider.get();
-		} catch (RepositoryException e) {
-			throw new RuntimeRepositoryException(e.getMessage(), e);
-		}
-	}
-
-	public <T> Optional<T> get(final RepositoryProvider<T> provider) {
-		try {
-			return Optional.ofNullable(provider.get());
-		} catch (RepositoryException e) {
-			LOG.error("Failed to apply node function!", e);
-			return Optional.empty();
-		}
-	}
-
-	public interface RepositoryProvider<T> {
-		T get() throws RepositoryException;
-	}
-
-	public interface RepositoryRunnable {
-		void run() throws RepositoryException;
 	}
 
 	public Optional<Session> getSession(final String workspace) {
