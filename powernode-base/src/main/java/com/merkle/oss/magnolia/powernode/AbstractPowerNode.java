@@ -64,15 +64,15 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 		nodeService.move(getWrappedNode(), newParent);
 	}
 
-	public Node getOrAddChild(final String relPath, final String primaryNodeTypeName) {
-		return nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath);
+	public N getOrAddChild(final String relPath, final String primaryNodeTypeName) {
+		return wrapNode(nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath));
 	}
 	/**
 	 * Creates child by localizing all relative path names.<br>
 	 * e.g. /node1/child_de/grandchild_de
 	 */
-	public Node getOrAddChild(final String relPath, final String primaryNodeTypeName, final Locale locale) {
-		return nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath, locale);
+	public N getOrAddChild(final String relPath, final String primaryNodeTypeName, final Locale locale) {
+		return wrapNode(nodeService.getOrAddChild(getWrappedNode(), primaryNodeTypeName, relPath, locale));
 	}
 
 	public Optional<N> getChild(final String relativePath) {
