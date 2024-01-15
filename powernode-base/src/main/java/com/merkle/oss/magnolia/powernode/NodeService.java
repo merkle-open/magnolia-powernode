@@ -192,16 +192,28 @@ public class NodeService {
 	}
 
 	public Stream<Node> streamChildren(final Node node) {
-		return streamChildren(node, ignored -> true);
-	}
-
-	public Stream<Node> streamChildren(final Node node, final Predicate<Node> predicate) {
 		return get(node::getNodes).stream()
 				.map(nodeIterator -> (Iterator<Node>)nodeIterator)
 				.flatMap(nodeIterator ->
-					StreamSupport.stream(Spliterators.spliteratorUnknownSize(nodeIterator, Spliterator.ORDERED), false)
+						StreamSupport.stream(Spliterators.spliteratorUnknownSize(nodeIterator, Spliterator.ORDERED), false)
+				);
+	}
+
+	public Stream<Node> streamChildren(final Node node, final Predicate<Node> predicate) {
+		return streamChildren(node).filter(predicate);
+	}
+
+	public Stream<Node> streamChildrenRecursive(final Node node) {
+		return streamChildren(node).flatMap(child ->
+				Stream.concat(
+						Stream.of(child),
+						streamChildrenRecursive(child)
 				)
-				.filter(predicate);
+		);
+	}
+
+	public Stream<Node> streamChildrenRecursive(final Node node, final Predicate<Node> predicate) {
+		return streamChildrenRecursive(node).filter(predicate);
 	}
 
 	public Optional<Node> getParent(final Node node) {

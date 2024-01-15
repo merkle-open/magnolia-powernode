@@ -95,6 +95,18 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 		return nodeService.streamChildren(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
 	}
 
+	public Stream<N> streamChildrenRecursive() {
+		return nodeService.streamChildrenRecursive(getWrappedNode()).map(this::wrapNode);
+	}
+
+	/**
+	 * @param predicate has no impact on the traversed children (only filters)
+	 */
+	public Stream<N> streamChildrenRecursive(final Predicate<N> predicate) {
+		return nodeService.streamChildrenRecursive(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
+	}
+
+
 	public Optional<N> getParentOptional() {
 		return nodeService.getParent(getWrappedNode()).map(this::wrapNode);
 	}

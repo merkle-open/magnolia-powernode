@@ -206,6 +206,29 @@ class NodeServiceTest {
 		);
 	}
 
+	/**
+	 * node
+	 *  |__child1
+	 *       |__grandChild1
+	 *  |__child2
+	 */
+	@Test
+	void streamChildrenRecursive() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("node", "someNodeType");
+		final Node child1 = node.addNode("child1", "someNodeType");
+		final Node child2 = node.addNode("child2", "someOtherNodeType");
+		final Node grandChild1 = child1.addNode("grandChild1", "someOtherNodeType");
+		assertEquals(
+				List.of(child1, grandChild1, child2),
+				nodeService.streamChildrenRecursive(node).collect(Collectors.toList())
+		);
+
+		assertEquals(
+				List.of(grandChild1, child2),
+				nodeService.streamChildrenRecursive(node, new NodeTypePredicate("someOtherNodeType")).collect(Collectors.toList())
+		);
+	}
+
 	@Test
 	void getParent() throws RepositoryException {
 		final Node node = session.getRootNode().addNode("node", "someNodeType");
