@@ -106,6 +106,14 @@ public class NodeService {
 		}).flatMap(Function.identity());
 	}
 
+	public Optional<Node> getRootNode(final String workspace) {
+		return getSession(workspace).map(this::getRootNode);
+	}
+
+	public Node getRootNode(final Session session) {
+		return getOrThrow(session::getRootNode);
+	}
+
 	public void rename(final Node node, final String newName) {
 		run(() -> {
 			if (!Objects.equals(node.getName(), newName)) {

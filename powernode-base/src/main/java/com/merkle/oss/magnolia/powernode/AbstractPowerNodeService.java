@@ -43,4 +43,12 @@ public abstract class AbstractPowerNodeService<N extends AbstractPowerNode<N>> {
 	public Optional<N> getByPath(final Session session, final String path) {
 		return nodeService.getByPath(session, path).map(powerNodeDecorator::wrapNode);
 	}
+
+	public Optional<N> getRootNode(final String workspace) {
+		return nodeService.getRootNode(workspace).map(powerNodeDecorator::wrapNode);
+	}
+
+	public N getRootNode(final Session session) {
+		return powerNodeDecorator.wrapNode(nodeService.getRootNode(session));
+	}
 }
