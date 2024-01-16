@@ -138,6 +138,27 @@ public class NodeOperationFactory {
 		});
 	}
 
+	public <T> NodeOperation setMultiProperty(final String propertyName, final Iterable<T> values, final PropertyService.ValueFactory<T> factory) {
+		return accept((nodeService, context) -> nodeService.setMultiProperty(context, propertyName, values, factory));
+	}
+	public <T> NodeOperation setMultiProperty(final String propertyName, final Locale locale, final Iterable<T> values, final PropertyService.ValueFactory<T> factory) {
+		return accept((nodeService, context) -> nodeService.setMultiProperty(context, propertyName, locale, values, factory));
+	}
+	public <T> NodeOperation setMultiPropertyOnlyIfMissing(final String propertyName, final Iterable<T> values, final PropertyService.ValueFactory<T> factory) {
+		return accept((nodeService, context) -> {
+			if(!nodeService.hasProperty(context, propertyName)) {
+				nodeService.setMultiProperty(context, propertyName, values, factory);
+			}
+		});
+	}
+	public <T> NodeOperation setMultiPropertyOnlyIfMissing(final String propertyName, final Locale locale, final Iterable<T> values, final PropertyService.ValueFactory<T> factory) {
+		return accept((nodeService, context) -> {
+			if(!nodeService.hasProperty(context, propertyName, locale)) {
+				nodeService.setMultiProperty(context, propertyName, locale, values, factory);
+			}
+		});
+	}
+
 	public NodeOperation setClassProperty(final Class<?> clazz) {
 		return setProperty("class", clazz.getName(), ValueConverter::toValue);
 	}
