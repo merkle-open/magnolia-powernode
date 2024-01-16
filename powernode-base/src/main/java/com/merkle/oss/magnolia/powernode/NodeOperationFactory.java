@@ -107,8 +107,14 @@ public class NodeOperationFactory {
 	public NodeOperation orderBefore(final String siblingName) {
 		return accept((nodeService, context) -> nodeService.run(() -> NodeUtil.orderBefore(context, siblingName)));
 	}
+	public NodeOperation orderFirst() {
+		return accept((nodeService, context) -> nodeService.run(() -> NodeUtil.orderFirst(context)));
+	}
 	public NodeOperation orderAfter(final String siblingName) {
 		return accept((nodeService, context) -> nodeService.run(() -> NodeUtil.orderAfter(context, siblingName)));
+	}
+	public NodeOperation orderLast() {
+		return accept((nodeService, context) -> nodeService.run(() -> NodeUtil.orderLast(context)));
 	}
 
 	public <T> NodeOperation setProperty(final String propertyName, @Nullable final T value, final PropertyService.ValueFactory<T> factory) {

@@ -126,6 +126,21 @@ class NodeOperationFactoryTest {
 	}
 
 	@Test
+	void orderFirst() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("someNode", "someNodeType");
+		final Node child1 = node.addNode("child1", "someNodeType");
+		final Node child2 = node.addNode("child2", "someNodeType");
+		final Node child3 = node.addNode("child3", "someNodeType");
+
+		execute(nodeOperationFactory.orderFirst(), child3, child3);
+
+		assertEquals(
+				List.of(child3, child1, child2),
+				Lists.newArrayList(node.getNodes())
+		);
+	}
+
+	@Test
 	void orderAfter() throws RepositoryException {
 		final Node node = session.getRootNode().addNode("someNode", "someNodeType");
 		final Node child1 = node.addNode("child1", "someNodeType");
@@ -135,6 +150,21 @@ class NodeOperationFactoryTest {
 
 		assertEquals(
 				List.of(child2, child1),
+				Lists.newArrayList(node.getNodes())
+		);
+	}
+
+	@Test
+	void orderLast() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("someNode", "someNodeType");
+		final Node child1 = node.addNode("child1", "someNodeType");
+		final Node child2 = node.addNode("child2", "someNodeType");
+		final Node child3 = node.addNode("child3", "someNodeType");
+
+		execute(nodeOperationFactory.orderLast(), child1, child1);
+
+		assertEquals(
+				List.of(child2, child3, child1),
 				Lists.newArrayList(node.getNodes())
 		);
 	}
