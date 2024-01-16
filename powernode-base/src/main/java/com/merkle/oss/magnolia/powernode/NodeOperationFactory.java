@@ -44,6 +44,18 @@ public class NodeOperationFactory {
 		};
 	}
 
+	public NodeOperation combine(final NodeOperation... ops) {
+		return new AbstractNodeOperation() {
+			@Override
+			protected Node doExec(final Node contextNode, final ErrorHandler errorHandler) {
+				Arrays.stream(ops).forEach(op ->
+						op.exec(contextNode, errorHandler)
+				);
+				return contextNode;
+			}
+		};
+	}
+
 	public NodeOperation copy(final String relativeSourcePath, final String relativeDestinationPath) {
 		return new AbstractNodeOperation() {
 			@Override
