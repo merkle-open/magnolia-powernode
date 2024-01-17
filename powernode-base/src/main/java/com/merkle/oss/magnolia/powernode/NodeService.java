@@ -1,5 +1,6 @@
 package com.merkle.oss.magnolia.powernode;
 
+import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaData;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.NodeUtil;
@@ -159,7 +160,8 @@ public class NodeService extends RepositoryExceptionDelegator {
 				.map(nodeIterator -> (Iterator<Node>)nodeIterator)
 				.flatMap(nodeIterator ->
 						StreamSupport.stream(Spliterators.spliteratorUnknownSize(nodeIterator, Spliterator.ORDERED), false)
-				);
+				)
+				.filter(new IsMetaData<>().negate());
 	}
 
 	public Stream<Node> streamChildren(final Node node, final Predicate<Node> predicate) {

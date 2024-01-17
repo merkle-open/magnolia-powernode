@@ -49,7 +49,7 @@ public class MockNode extends info.magnolia.test.mock.jcr.MockNode {
 	}
 
 	@Override
-	public void setPrimaryType(String primaryType) {
+	public void setPrimaryType(final String primaryType) {
 		setPrimaryNodeType(new MockNodeType(primaryType));
 	}
 

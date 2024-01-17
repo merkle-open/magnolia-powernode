@@ -166,6 +166,9 @@ class NodeServiceTest {
 		final Node node = session.getRootNode().addNode("node", "someNodeType");
 		final Node child1 = node.addNode("child1", "someNodeType");
 		final Node child2 = node.addNode("child2", "someOtherNodeType");
+		node.addNode(NodeTypes.JCR_PREFIX+"child", "someNodeType"); //should be filtered (metaData)
+		node.addNode(NodeTypes.REP_PREFIX+"child", "someNodeType"); //should be filtered (metaData)
+		node.addNode("child", NodeTypes.MetaData.NAME); //should be filtered (metaData)
 		assertEquals(
 				List.of(child1, child2),
 				nodeService.streamChildren(node).collect(Collectors.toList())
