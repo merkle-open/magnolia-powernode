@@ -28,11 +28,10 @@ public class BlossomServletConfiguration {
 }
 ```
 
-* If needed, add the PowerNodeArgumentResolver in the `BlossomServletConfiguration` as follows:
+* If needed, add the DelegatingPowerNodeArgumentResolver in the `BlossomServletConfiguration` as follows:
 ```java
 @Override
 protected void addArgumentResolvers(final List<HandlerMethodArgumentResolver> argumentResolvers) {
-      argumentResolvers.add(powerNodeArgumentResolver);
-      argumentResolvers.add(new BlossomHandlerMethodArgumentResolver());
+      argumentResolvers.add(delegatingPowerNodeArgumentResolverFactory.create(new BlossomHandlerMethodArgumentResolver()));
 }
 ```
