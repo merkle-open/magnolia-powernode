@@ -1,6 +1,6 @@
 package com.merkle.oss.magnolia.powernode.predicate;
 
-import com.merkle.oss.magnolia.powernode.MockNode;
+import com.merkle.oss.magnolia.powernode.mock.MockNode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

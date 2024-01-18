@@ -1,6 +1,7 @@
 package com.merkle.oss.magnolia.powernode;
 
 import com.google.common.collect.Lists;
+import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
 import info.magnolia.jcr.nodebuilder.ErrorHandler;
 import info.magnolia.jcr.nodebuilder.NodeOperation;
 import info.magnolia.jcr.nodebuilder.StrictErrorHandler;

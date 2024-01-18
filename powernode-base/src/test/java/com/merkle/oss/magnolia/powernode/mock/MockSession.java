@@ -1,4 +1,4 @@
-package com.merkle.oss.magnolia.powernode;
+package com.merkle.oss.magnolia.powernode.mock;
 
 import info.magnolia.test.mock.jcr.MockWorkspace;
 

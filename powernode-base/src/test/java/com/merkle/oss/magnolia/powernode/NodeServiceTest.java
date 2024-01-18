@@ -1,9 +1,11 @@
 package com.merkle.oss.magnolia.powernode;
 
 import com.google.common.collect.Lists;
+import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
+import com.merkle.oss.magnolia.powernode.mock.JcrSessionProviderMock;
+import com.merkle.oss.magnolia.powernode.mock.MockSession;
 import info.magnolia.cms.i18n.DefaultI18nContentSupport;
 import info.magnolia.cms.i18n.I18nContentSupport;
-import info.magnolia.jcr.RuntimeRepositoryException;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
@@ -33,7 +35,7 @@ class NodeServiceTest {
 	void setUp() {
 		final NodeNameHelper nodeNameHelper = mock(NodeNameHelper.class);
 		doAnswer(invocationOnMock -> invocationOnMock.getArgument(0)).when(nodeNameHelper).getValidatedName(anyString());
-		JcrSessionProviderMock jcrSessionProvider = new JcrSessionProviderMock();
+		final JcrSessionProviderMock jcrSessionProvider = new JcrSessionProviderMock();
 		session = new MockSession("testing");
 		jcrSessionProvider.mock(session);
 		jcrSessionProvider.mockSystem(new MockSession("testing"));
@@ -314,32 +316,6 @@ class NodeServiceTest {
 		);
 		nodeService.removeProperty(node, "someKey", Locale.CANADA);
 		assertFalse(nodeService.hasProperty(node, "someKey", Locale.CANADA));
-	}
-
-	private static class JcrSessionProviderMock implements JcrSessionProvider {
-		private final Map<String, Session> mocks = new HashMap<>();
-		private final Map<String, Session> systemMocks = new HashMap<>();
-
-		public void mock(final Session session) {
-			mocks.put(session.getWorkspace().getName(), session);
-		}
-		@Override
-		public Session getSession(final String workspace) {
-			if(mocks.containsKey(workspace)) {
-				return mocks.get(workspace);
-			}
-			throw new IllegalStateException(workspace+" not mocked!");
-		}
-		public void mockSystem(final Session session) {
-			systemMocks.put(session.getWorkspace().getName(), session);
-		}
-		@Override
-		public Session getSystemSession(final String workspace) {
-			if(systemMocks.containsKey(workspace)) {
-				return systemMocks.get(workspace);
-			}
-			throw new IllegalStateException(workspace+" not mocked!");
-		}
 	}
 
 	private static class NodeTypePredicate implements Predicate<Node> {

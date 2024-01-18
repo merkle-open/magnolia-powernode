@@ -1,10 +1,12 @@
-package com.merkle.oss.magnolia.powernode;
+package com.merkle.oss.magnolia.powernode.mock;
+
+import com.merkle.oss.magnolia.powernode.LocalizedNameProvider;
 
 import javax.annotation.Nullable;
 import javax.jcr.Node;
 import java.util.Locale;
 
-class LocalizedNameProviderMock implements LocalizedNameProvider {
+public class LocalizedNameProviderMock implements LocalizedNameProvider {
 	@Override
 	public String getLocalizedPropertyName(@Nullable final Node node, final String propertyName, final Locale locale) {
 		return propertyName + "_" + locale.toLanguageTag();

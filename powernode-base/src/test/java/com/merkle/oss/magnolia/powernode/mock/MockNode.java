@@ -1,10 +1,10 @@
-package com.merkle.oss.magnolia.powernode;
+package com.merkle.oss.magnolia.powernode.mock;
 
-import info.magnolia.test.mock.jcr.MockSession;
 
 import javax.annotation.Nullable;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class MockNode extends info.magnolia.test.mock.jcr.MockNode {
 
 	MockNode(final MockSession session) {
 		super(session);
-		setPrimaryType("nt:base");
+		setPrimaryType("rep:root");
 	}
 
 	public MockNode(final String name) {
@@ -37,8 +37,7 @@ public class MockNode extends info.magnolia.test.mock.jcr.MockNode {
 			nodeName = relPath.substring(lastSlashsPosition + 1);
 		}
 
-		MockNode newChild = new MockNode(nodeName);
-		newChild.setPrimaryType(primaryNodeTypeName);
+		MockNode newChild = new MockNode(nodeName, primaryNodeTypeName);
 		nodesParent.addNode(newChild);
 		return newChild;
 	}
@@ -56,6 +55,12 @@ public class MockNode extends info.magnolia.test.mock.jcr.MockNode {
 	@Override
 	public void setPrimaryNodeType(final NodeType primaryNodeType) {
 		this.primaryNodeType = primaryNodeType;
+	}
+
+	@Override
+	public Session getSession() {
+		final Session session = super.getSession();
+		return session != null ? session : new MockSession("testing");
 	}
 
 	public static class MockNodeType extends info.magnolia.test.mock.MockNodeType {

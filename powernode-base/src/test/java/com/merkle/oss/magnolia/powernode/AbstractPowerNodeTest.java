@@ -1,8 +1,8 @@
 package com.merkle.oss.magnolia.powernode;
 
+import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
 import info.magnolia.test.mock.jcr.MockNode;
 import info.magnolia.test.mock.jcr.MockSession;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.jcr.Node;
