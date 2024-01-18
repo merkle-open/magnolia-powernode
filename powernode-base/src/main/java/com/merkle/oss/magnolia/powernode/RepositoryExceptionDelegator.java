@@ -4,6 +4,8 @@ import info.magnolia.jcr.RuntimeRepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import java.lang.invoke.MethodHandles;
 import java.util.Optional;
@@ -29,6 +31,10 @@ public class RepositoryExceptionDelegator {
 	public <T> Optional<T> get(final NodeService.RepositoryProvider<T> provider) {
 		try {
 			return Optional.ofNullable(provider.get());
+		} catch (PathNotFoundException | ItemNotFoundException e) {
+			return Optional.empty();
+		} catch (RuntimeRepositoryException e) {
+			return get(() -> {throw (RepositoryException)e.getCause();});
 		} catch (RepositoryException e) {
 			LOG.error("Failed to apply node function!", e);
 			return Optional.empty();

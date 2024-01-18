@@ -47,13 +47,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 
 	public Optional<Node> getByIdentifier(final Session session, final String identifier) {
-		return get(() -> {
-			try {
-				return Optional.of(session.getNodeByIdentifier(identifier));
-			} catch (ItemNotFoundException e) {
-				return Optional.<Node>empty();
-			}
-		}).flatMap(Function.identity());
+		return get(() -> session.getNodeByIdentifier(identifier));
 	}
 
 	public Optional<Node> getByPath(final String workspace, final String path) {
@@ -61,13 +55,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 
 	public Optional<Node> getByPath(final Session session, final String path) {
-		return get(() -> {
-			try {
-				return Optional.of(session.getNode(path));
-			} catch (PathNotFoundException e) {
-				return Optional.<Node>empty();
-			}
-		}).flatMap(Function.identity());
+		return get(() -> session.getNode(path));
 	}
 
 	public Optional<Node> getRootNode(final String workspace) {
@@ -146,13 +134,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 
 	public Optional<Node> getChild(final Node node, final String relativePath) {
-		return get(() -> {
-			try {
-				return Optional.of(node.getNode(relativePath));
-			} catch (PathNotFoundException e) {
-				return Optional.<Node>empty();
-			}
-		}).flatMap(Function.identity());
+		return get(() -> node.getNode(relativePath));
 	}
 
 	public Stream<Node> streamChildren(final Node node) {
@@ -182,13 +164,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 
 	public Optional<Node> getParent(final Node node) {
-		return get(() -> {
-			try {
-				return Optional.of(node.getParent());
-			} catch (ItemNotFoundException e) {
-				return Optional.<Node>empty();
-			}
-		}).flatMap(Function.identity());
+		return get(node::getParent);
 	}
 
 	public Optional<Node> getAncestor(final Node node, final Predicate<Node> predicate) {

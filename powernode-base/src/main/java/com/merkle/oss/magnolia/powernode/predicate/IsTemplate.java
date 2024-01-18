@@ -16,6 +16,6 @@ public class IsTemplate<N extends Node> extends RepositoryExceptionDelegator imp
 
 	@Override
 	public boolean test(final N node) {
-		return Objects.equals(templateId, getOrThrow(() -> node.getProperty(NodeTypes.Renderable.TEMPLATE).getString()));
+		return get(() -> node.getProperty(NodeTypes.Renderable.TEMPLATE).getString()).map(templateId::equals).orElse(false);
 	}
 }

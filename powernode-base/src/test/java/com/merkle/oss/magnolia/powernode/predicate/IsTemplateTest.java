@@ -14,6 +14,7 @@ class IsTemplateTest {
 	@Test
 	void  test() throws RepositoryException {
 		final MockNode node = new MockNode("name");
+		assertFalse(new IsTemplate<>("someTemplateId").test(node));
 		node.setProperty(NodeTypes.Renderable.TEMPLATE, "someTemplateId");
 		assertTrue(new IsTemplate<>("someTemplateId").test(node));
 		assertFalse(new IsTemplate<>("someOtherTemplateId").test(node));

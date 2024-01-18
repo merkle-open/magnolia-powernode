@@ -4,6 +4,7 @@ import info.magnolia.jcr.RuntimeRepositoryException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import java.util.Optional;
 
@@ -39,6 +40,10 @@ class RepositoryExceptionDelegatorTest {
 	void get() {
 		assertTrue(repositoryExceptionDelegator.get(() -> {
 			throw new RepositoryException("some repo exception");
+		}).isEmpty());
+
+		assertTrue(repositoryExceptionDelegator.get((NodeService.RepositoryProvider<RepositoryException>)() -> {
+			throw new RuntimeRepositoryException(new PathNotFoundException("some nested repo exception"));
 		}).isEmpty());
 
 		assertEquals(Optional.of(42), repositoryExceptionDelegator.get(() -> 42));
