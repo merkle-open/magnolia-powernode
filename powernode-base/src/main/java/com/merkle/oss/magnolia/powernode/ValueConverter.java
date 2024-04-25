@@ -54,19 +54,31 @@ public class ValueConverter {
 				.map(factory::createValue);
 	}
 
+	public Optional<Value> toValue(@Nullable final Instant value) {
+		return Optional.ofNullable(value)
+				.map(date -> {
+					final Calendar calendar = Calendar.getInstance();
+					calendar.setTimeInMillis(value.toEpochMilli());
+					return calendar;
+				})
+				.map(factory::createValue);
+	}
+
 	public Optional<Value> toValue(@Nullable final LocalDate value) {
 		return Optional.ofNullable(value)
 				.map(localDate -> localDate.atStartOfDay(zoneIdProvider.get()))
-				.map(ZonedDateTime::toInstant)
-				.map(Date::from)
 				.flatMap(this::toValue);
 	}
 
 	public Optional<Value> toValue(@Nullable final LocalDateTime value) {
 		return Optional.ofNullable(value)
 				.map(localDateTime -> localDateTime.atZone(zoneIdProvider.get()))
+				.flatMap(this::toValue);
+	}
+
+	public Optional<Value> toValue(@Nullable final ZonedDateTime value) {
+		return Optional.ofNullable(value)
 				.map(ZonedDateTime::toInstant)
-				.map(Date::from)
 				.flatMap(this::toValue);
 	}
 
@@ -103,16 +115,22 @@ public class ValueConverter {
 		return getPropertyOptional(() -> value.getDate().getTime());
 	}
 
-	public Optional<LocalDate> getLocalDate(final Value value) throws RepositoryException {
+	public Optional<Instant> getInstant(final Value value) throws RepositoryException {
 		return getPropertyOptional(() ->
-				LocalDate.ofInstant(Instant.ofEpochMilli(value.getDate().getTimeInMillis()), zoneIdProvider.get())
+				Instant.ofEpochMilli(value.getDate().getTimeInMillis())
 		);
 	}
 
+	public Optional<LocalDate> getLocalDate(final Value value) throws RepositoryException {
+		return getInstant(value).map(instant -> LocalDate.ofInstant(instant, zoneIdProvider.get()));
+	}
+
 	public Optional<LocalDateTime> getLocalDateTime(final Value value) throws RepositoryException {
-		return getPropertyOptional(() ->
-				LocalDateTime.ofInstant(Instant.ofEpochMilli(value.getDate().getTimeInMillis()), zoneIdProvider.get())
-		);
+		return getInstant(value).map(instant -> LocalDateTime.ofInstant(instant, zoneIdProvider.get()));
+	}
+
+	public Optional<ZonedDateTime> getZonedDateTime(final Value value) throws RepositoryException {
+		return getInstant(value).map(instant -> ZonedDateTime.ofInstant(instant, zoneIdProvider.get()));
 	}
 
 	public Optional<Binary> getBinary(final Value value) throws RepositoryException {

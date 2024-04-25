@@ -79,7 +79,7 @@ class ValueConverterTest {
 
 	@Test
 	void getDouble() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noDouble")).isEmpty());
+		assertTrue(valueConverter.getDouble(new StringValue("noDouble")).isEmpty());
 		assertEquals(
 				Optional.of(42.42),
 				valueConverter.getDouble(new StringValue("42.42"))
@@ -97,7 +97,7 @@ class ValueConverterTest {
 
 	@Test
 	void getLong() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noLong")).isEmpty());
+		assertTrue(valueConverter.getLong(new StringValue("noLong")).isEmpty());
 		assertEquals(
 				Optional.of(42L),
 				valueConverter.getLong(new StringValue("42"))
@@ -115,7 +115,7 @@ class ValueConverterTest {
 
 	@Test
 	void getInteger() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noInteger")).isEmpty());
+		assertTrue(valueConverter.getInteger(new StringValue("noInteger")).isEmpty());
 		assertEquals(
 				Optional.of(42),
 				valueConverter.getInteger(new StringValue("42"))
@@ -133,7 +133,6 @@ class ValueConverterTest {
 
 	@Test
 	void getBoolean() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noBoolean")).isEmpty());
 		assertEquals(
 				Optional.of(true),
 				valueConverter.getBoolean(new StringValue("true"))
@@ -151,11 +150,49 @@ class ValueConverterTest {
 
 	@Test
 	void getDate() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noDate")).isEmpty());
+		assertTrue(valueConverter.getDate(new StringValue("noDate")).isEmpty());
 		final ZonedDateTime zonedDateTime = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45).atZone(zoneIdProvider.get());
 		assertEquals(
 				Optional.of(new Date(zonedDateTime.toInstant().toEpochMilli())),
 				valueConverter.getDate(new StringValue(ISO8601.format(zonedDateTime.toInstant().toEpochMilli())))
+		);
+	}
+
+	@Test
+	void convertInstant() {
+		final Instant input = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45).atZone(zoneIdProvider.get()).toInstant();
+		assertEquals(
+				Optional.of(input),
+				valueConverter.toValue(input).flatMap(value -> getOrThrow(() -> valueConverter.getInstant(value)))
+		);
+	}
+
+	@Test
+	void getInstant() throws RepositoryException {
+		assertTrue(valueConverter.getInstant(new StringValue("noDate")).isEmpty());
+		final ZonedDateTime zonedDateTime = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45).atZone(zoneIdProvider.get());
+		assertEquals(
+				Optional.of(zonedDateTime.toInstant()),
+				valueConverter.getInstant(new StringValue(ISO8601.format(zonedDateTime.toInstant().toEpochMilli())))
+		);
+	}
+
+	@Test
+	void convertZonedDateTime() {
+		final ZonedDateTime input = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45).atZone(zoneIdProvider.get());
+		assertEquals(
+				Optional.of(input),
+				valueConverter.toValue(input).flatMap(value -> getOrThrow(() -> valueConverter.getZonedDateTime(value)))
+		);
+	}
+
+	@Test
+	void getZonedDateTime() throws RepositoryException {
+		assertTrue(valueConverter.getZonedDateTime(new StringValue("noDate")).isEmpty());
+		final ZonedDateTime zonedDateTime = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45).atZone(zoneIdProvider.get());
+		assertEquals(
+				Optional.of(zonedDateTime),
+				valueConverter.getZonedDateTime(new StringValue(ISO8601.format(zonedDateTime.toInstant().toEpochMilli())))
 		);
 	}
 
@@ -170,7 +207,7 @@ class ValueConverterTest {
 
 	@Test
 	void getLocalDate() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noDate")).isEmpty());
+		assertTrue(valueConverter.getLocalDate(new StringValue("noDate")).isEmpty());
 		final LocalDateTime localDateTime = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45);
 		assertEquals(
 				Optional.of(localDateTime.toLocalDate()),
@@ -189,7 +226,7 @@ class ValueConverterTest {
 
 	@Test
 	void getLocalDateTime() throws RepositoryException {
-		assertTrue(valueConverter.getDecimal(new StringValue("noDate")).isEmpty());
+		assertTrue(valueConverter.getLocalDateTime(new StringValue("noDate")).isEmpty());
 		final LocalDateTime localDateTime = LocalDateTime.of(2023, Month.NOVEMBER, 6, 7, 45);
 		assertEquals(
 				Optional.of(localDateTime),
