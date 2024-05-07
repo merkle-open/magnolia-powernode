@@ -9,6 +9,7 @@ import info.magnolia.cms.i18n.DefaultI18nContentSupport;
 import info.magnolia.cms.i18n.I18nContentSupport;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
+import info.magnolia.jcr.util.PropertyUtil;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 import info.magnolia.test.ComponentsTestUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -126,7 +127,7 @@ class NodeServiceTest {
 	void copy() throws RepositoryException {
 		final Node src = session.getRootNode().addNode("node1", "someNodeType");
 		src.setProperty("property1", 42);
-		src.setProperty("property2", "test");
+		src.setProperty("property2", new String[]{"test"});
 		src.setProperty(NodeTypes.Renderable.TEMPLATE, "someTemplateId");
 		src.setProperty("excludedProperty", "test42");
 		src.addNode("subNode1", "someNodeType").addNode("subNode2", "someOtherNodeType");
@@ -144,7 +145,7 @@ class NodeServiceTest {
 		final Optional<Node> copy = nodeService.getByPath(session, "/node2/node1");
 		assertTrue(copy.isPresent());
 		assertEquals(42, copy.get().getProperty("property1").getLong());
-		assertEquals("test", copy.get().getProperty("property2").getString());
+		assertEquals(List.of("test"), PropertyUtil.getValuesStringList(copy.get().getProperty("property2").getValues()));
 		assertEquals("someTemplateId", copy.get().getProperty(NodeTypes.Renderable.TEMPLATE).getString());
 		assertFalse(copy.get().hasProperty("excludedProperty"));
 		assertTrue(copy.get().hasNode("subNode1"));

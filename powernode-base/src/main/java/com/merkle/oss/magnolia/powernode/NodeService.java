@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaData;
@@ -124,12 +125,16 @@ public class NodeService extends RepositoryExceptionDelegator {
 		});
 	}
 
-	private void copyProperties(final Node src, final Node dest, final Predicate<Property> propertyPredicate)  {
-		final PropertyIterator properties = getOrThrow(src::getProperties);
+	private void copyProperties(final Node src, final Node dest, final Predicate<Property> propertyPredicate) throws RepositoryException {
+		final PropertyIterator properties = src.getProperties();
 		while (properties.hasNext()) {
 			final Property property = properties.nextProperty();
 			if(new IsMetaDataProperty().negate().and(propertyPredicate).test(property)) {
-				run(() -> dest.setProperty(property.getName(), property.getValue()));
+				if(property.isMultiple()) {
+					dest.setProperty(property.getName(), property.getValues());
+				}else {
+					dest.setProperty(property.getName(), property.getValue());
+				}
 			}
 		}
 	}
