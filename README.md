@@ -15,7 +15,7 @@ Advantages:
   <dependency>
       <groupId>com.namics.oss.magnolia</groupId>
       <artifactId>magnolia-powernode</artifactId>
-      <version>2.0.7</version>
+      <version>2.0.8</version>
   </dependency>
   ```
 
