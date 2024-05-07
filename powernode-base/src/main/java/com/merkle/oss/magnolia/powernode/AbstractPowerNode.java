@@ -3,16 +3,18 @@ package com.merkle.oss.magnolia.powernode;
 import info.magnolia.jcr.decoration.ContentDecoratorNodeWrapper;
 import info.magnolia.jcr.util.NodeTypes;
 
-import javax.annotation.Nullable;
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
 
 public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends ContentDecoratorNodeWrapper<AbstractPowerNodeDecorator<N>> {
 	private final NodeService nodeService;
@@ -62,6 +64,22 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 
 	public void move(final Node newParent) {
 		nodeService.move(getWrappedNode(), newParent);
+	}
+
+	public void copy(final Node dest) {
+		nodeService.copy(getWrappedNode(), dest, ignored -> false, ignored -> true, (ignored, ignored2) -> {});
+	}
+
+	public void copyRecursive(final Node dest) {
+		nodeService.copy(getWrappedNode(), dest, ignored -> true, ignored -> true, (ignored, ignored2) -> {});
+	}
+
+	public void copy(final Node dest, final Predicate<N> recursiveChildNodePredicate) {
+		nodeService.copy(getWrappedNode(), dest, node -> recursiveChildNodePredicate.test(wrapNode(node)), ignored -> true, (ignored, ignored2) -> {});
+	}
+
+	public void copy(final Node dest, final Predicate<N> recursiveChildNodePredicate, final Predicate<Property> propertyPredicate, final BiConsumer<N, N> copyConsumer) {
+		nodeService.copy(getWrappedNode(), dest, node -> recursiveChildNodePredicate.test(wrapNode(node)), propertyPredicate, (src, copy) -> copyConsumer.accept(wrapNode(src), wrapNode(copy)));
 	}
 
 	public N getOrAddChild(final String relPath, final String primaryNodeTypeName) {

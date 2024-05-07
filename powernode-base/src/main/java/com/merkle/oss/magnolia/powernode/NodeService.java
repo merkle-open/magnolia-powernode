@@ -1,19 +1,31 @@
 package com.merkle.oss.magnolia.powernode;
 
-import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaData;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.NodeUtil;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.jcr.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.Session;
+
+import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaData;
+import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaDataProperty;
 
 public class NodeService extends RepositoryExceptionDelegator {
 	private final LocalizedNameProvider localizedNameProvider;
@@ -98,6 +110,27 @@ public class NodeService extends RepositoryExceptionDelegator {
 				NodeTypes.LastModified.update(node);
 				NodeTypes.LastModified.update(newParent);
 			});
+		}
+	}
+
+	public void copy(final Node src, final Node dest, final Predicate<Node> recursiveChildNodePredicate, final Predicate<Property> propertyPredicate, final BiConsumer<Node, Node> copyConsumer) {
+		run(() -> {
+			final Node copy = dest.addNode(src.getName(), src.getPrimaryNodeType().getName());
+			copyProperties(src, copy, propertyPredicate);
+			copyConsumer.accept(src, copy);
+			streamChildren(src, recursiveChildNodePredicate).forEach(page ->
+					copy(page, copy, recursiveChildNodePredicate, propertyPredicate, copyConsumer)
+			);
+		});
+	}
+
+	private void copyProperties(final Node src, final Node dest, final Predicate<Property> propertyPredicate)  {
+		final PropertyIterator properties = getOrThrow(src::getProperties);
+		while (properties.hasNext()) {
+			final Property property = properties.nextProperty();
+			if(new IsMetaDataProperty().negate().and(propertyPredicate).test(property)) {
+				run(() -> dest.setProperty(property.getName(), property.getValue()));
+			}
 		}
 	}
 

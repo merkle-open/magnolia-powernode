@@ -1,6 +1,7 @@
 package com.merkle.oss.magnolia.powernode;
 
 import com.google.common.collect.Lists;
+import com.machinezoo.noexception.Exceptions;
 import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
 import com.merkle.oss.magnolia.powernode.mock.JcrSessionProviderMock;
 import com.merkle.oss.magnolia.powernode.mock.MockSession;
@@ -119,6 +120,37 @@ class NodeServiceTest {
 			lastModified.verify(() -> NodeTypes.LastModified.update(node2));
 			assertTrue(nodeService.getByPath(session, "/node2/node1").isPresent());
 		}
+	}
+
+	@Test
+	void copy() throws RepositoryException {
+		final Node src = session.getRootNode().addNode("node1", "someNodeType");
+		src.setProperty("property1", 42);
+		src.setProperty("property2", "test");
+		src.setProperty(NodeTypes.Renderable.TEMPLATE, "someTemplateId");
+		src.setProperty("excludedProperty", "test42");
+		src.addNode("subNode1", "someNodeType").addNode("subNode2", "someOtherNodeType");
+		final Node dst = session.getRootNode().addNode("node2", "someNodeType");
+
+		final ArrayList<Map.Entry<Node, Node>> copies = new ArrayList<>();
+		nodeService.copy(
+				src,
+				dst,
+				child -> !Exceptions.wrap().get(child::getPrimaryNodeType).isNodeType("someOtherNodeType"),
+				property -> !Exceptions.wrap().get(property::getName).equals("excludedProperty"),
+				(copySrc, copy) -> copies.add(Map.entry(copySrc, copy))
+		);
+
+		final Optional<Node> copy = nodeService.getByPath(session, "/node2/node1");
+		assertTrue(copy.isPresent());
+		assertEquals(42, copy.get().getProperty("property1").getLong());
+		assertEquals("test", copy.get().getProperty("property2").getString());
+		assertEquals("someTemplateId", copy.get().getProperty(NodeTypes.Renderable.TEMPLATE).getString());
+		assertFalse(copy.get().hasProperty("excludedProperty"));
+		assertTrue(copy.get().hasNode("subNode1"));
+		final Node subNode1 = copy.get().getNode("subNode1");
+		assertFalse(subNode1.hasNode("subNode2"));
+		assertEquals(List.of(Map.entry(src, copy.get()), Map.entry(src.getNode("subNode1"), subNode1)), copies);
 	}
 
 	@Test
