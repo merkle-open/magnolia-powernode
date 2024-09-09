@@ -5,7 +5,7 @@
 
     <groupId>com.namics.oss.magnolia</groupId>
     <artifactId>magnolia-powernode-parent</artifactId>
-    <version>2.0.10-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -36,28 +36,29 @@
     </modules>
 
     <properties>
-        <magnolia.version>6.2.39</magnolia.version>
-        <spring.version>5.3.30</spring.version>
-        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <!--check for new versions:  mvn versions:display-property-updates -->
+        <magnolia.version>6.3.0</magnolia.version>
+        <spring.version>5.3.39</spring.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.inject.version>1</javax.inject.version>
         <java-poet.version>1.13.0</java-poet.version>
+        <jsr305.nullable.version>3.0.2</jsr305.nullable.version>
 
         <!-- Testing -->
-        <junit.version>5.10.0</junit.version>
-        <mockito.version>5.6.0</mockito.version>
-        <hamcrest.version>2.2</hamcrest.version>
+        <junit.version>5.11.0</junit.version>
+        <mockito.version>5.13.0</mockito.version>
 
         <!-- Maven Plugins -->
-        <mvn.compiler.plugin.version>3.10.1</mvn.compiler.plugin.version>
-        <mvn.source.plugin.version>3.2.1</mvn.source.plugin.version>
+        <mvn.compiler.plugin.version>3.13.0</mvn.compiler.plugin.version>
+        <mvn.source.plugin.version>3.3.1</mvn.source.plugin.version>
         <mvn.javadoc.version>3.5.0</mvn.javadoc.version>
-        <mvn.surefire.plugin.version>3.0.0-M7</mvn.surefire.plugin.version>
+        <mvn.surefire.plugin.version>3.5.0</mvn.surefire.plugin.version>
         <mvn.gpg.plugin.version>3.0.1</mvn.gpg.plugin.version>
         <mvn.nexus-staging.plugin.version>1.6.13</mvn.nexus-staging.plugin.version>
         <mvn.exec.plugin.version>3.1.0</mvn.exec.plugin.version>
         <mvn.build-helper.plugin.version>3.4.0</mvn.build-helper.plugin.version>
 
-        <javaVersion>11</javaVersion>
+        <javaVersion>17</javaVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
@@ -80,6 +81,11 @@
                 <groupId>com.namics.oss.magnolia</groupId>
                 <artifactId>magnolia-powernode-generator</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.nullable.version}</version>
             </dependency>
 
             <!-- testing -->
@@ -125,6 +131,11 @@
             <version>${javax.servlet-api.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+
         <!-- testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -142,12 +153,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
