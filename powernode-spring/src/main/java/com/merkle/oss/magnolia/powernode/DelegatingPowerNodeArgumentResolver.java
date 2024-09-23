@@ -1,30 +1,32 @@
 package com.merkle.oss.magnolia.powernode;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.jcr.Node;
 import java.util.Optional;
 
+import com.merkle.oss.magnolia.powernode.PowerNode;
+import com.merkle.oss.magnolia.powernode.PowerNodeDecorator;
+
 /**
- * Resolves arguments with type {@link AbstractPowerNode} by resolving type {@link Node} and wrapping it.
+ * Resolves arguments with type {@link PowerNode} by resolving type {@link Node} and wrapping it.
  */
-public class DelegatingPowerNodeArgumentResolver<N extends AbstractPowerNode<N>> implements HandlerMethodArgumentResolver {
-	private final AbstractPowerNodeDecorator<N> decorator;
-	private final Class<N> powerNodeClass;
+public class DelegatingPowerNodeArgumentResolver implements HandlerMethodArgumentResolver {
+	private final PowerNodeDecorator decorator;
 	private final HandlerMethodArgumentResolver delegate;
 
 	public DelegatingPowerNodeArgumentResolver(
-			final AbstractPowerNodeDecorator<N> decorator,
-			final Class<N> powerNodeClass,
+			final PowerNodeDecorator decorator,
 			final HandlerMethodArgumentResolver delegate
 	) {
 		this.decorator = decorator;
-		this.powerNodeClass = powerNodeClass;
 		this.delegate = delegate;
 	}
 
@@ -51,7 +53,7 @@ public class DelegatingPowerNodeArgumentResolver<N extends AbstractPowerNode<N>>
 	}
 
 	private Optional<MethodParameter> nodeMethodParam(final MethodParameter methodParameter) {
-		if(methodParameter.getParameterType().isAssignableFrom(powerNodeClass)) {
+		if(methodParameter.getParameterType().isAssignableFrom(PowerNode.class)) {
 			return Optional.of(
 					new MethodParameter(methodParameter) {
 						@Override
@@ -64,20 +66,17 @@ public class DelegatingPowerNodeArgumentResolver<N extends AbstractPowerNode<N>>
 		return Optional.empty();
 	}
 
-	public static abstract class AbstractDelegatingPowerNodeArgumentResolverFactory<N extends AbstractPowerNode<N>> {
-		private final AbstractPowerNodeDecorator<N> decorator;
-		private final Class<N> powerNodeClass;
+	@Component
+	public static class Factory {
+		private final PowerNodeDecorator decorator;
 
-		public AbstractDelegatingPowerNodeArgumentResolverFactory(
-				final AbstractPowerNodeDecorator<N> decorator,
-				final Class<N> powerNodeClass
-		) {
+		@Inject
+		public Factory(final PowerNodeDecorator decorator) {
 			this.decorator = decorator;
-			this.powerNodeClass = powerNodeClass;
 		}
 
-		public DelegatingPowerNodeArgumentResolver<N> create(final HandlerMethodArgumentResolver delegate) {
-			return new DelegatingPowerNodeArgumentResolver<>(decorator, powerNodeClass, delegate);
+		public DelegatingPowerNodeArgumentResolver create(final HandlerMethodArgumentResolver delegate) {
+			return new DelegatingPowerNodeArgumentResolver(decorator, delegate);
 		}
 	}
 }

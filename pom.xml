@@ -33,6 +33,7 @@
         <module>powernode-generator</module>
         <module>powernode-base</module>
         <module>powernode</module>
+        <module>powernode-spring</module>
     </modules>
 
     <properties>
@@ -83,6 +84,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.namics.oss.magnolia</groupId>
+                <artifactId>magnolia-powernode</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${jsr305.nullable.version}</version>
@@ -114,16 +120,7 @@
             <artifactId>magnolia-rendering</artifactId>
             <!-- required to implement PowerNodeArgumentResolver -->
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>javax.servlet</groupId>

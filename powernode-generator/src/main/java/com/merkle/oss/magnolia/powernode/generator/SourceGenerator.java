@@ -1,9 +1,5 @@
 package com.merkle.oss.magnolia.powernode.generator;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.JavaFile;
-
-import javax.annotation.processing.Generated;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -11,12 +7,15 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.processing.Generated;
+
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.JavaFile;
+
 public class SourceGenerator {
 	private final Set<ClassGenerator> classGenerators = Set.of(
 			new PowerNodeClassGenerator(),
 			new PowerNodeDecoratorClassGenerator(),
-			new DelegatingPowerNodeArgumentResolverFactoryClassGenerator(),
-			new PowerNodeConfigurationClassGenerator(),
 			new PowerNodeServiceClassGenerator()
 	);
 

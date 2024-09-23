@@ -10,11 +10,17 @@ Advantages:
 
 ## Setup
 
-* Add Maven dependency:
+* Add Maven dependencies:
   ```xml
   <dependency>
       <groupId>com.namics.oss.magnolia</groupId>
       <artifactId>magnolia-powernode</artifactId>
+      <version>2.1.0</version>
+  </dependency>
+  <!-- only if used with blossom -->
+  <dependency>
+      <groupId>com.namics.oss.magnolia</groupId>
+      <artifactId>magnolia-powernode-spring</artifactId>
       <version>2.1.0</version>
   </dependency>
   ```
@@ -52,7 +58,7 @@ Advantages:
   </components>
   ```
 
-* Import Spring Configuration:
+* Import Spring Configuration (only if used with blossom):
   ```java
   @Configuration
   @Import({PowerNodeConfiguration.class})
@@ -61,10 +67,10 @@ Advantages:
   }
   ```
 
-* If needed, add the DelegatingPowerNodeArgumentResolver in the `BlossomServletConfiguration` as follows:
-  ```java
-  @Override
-  protected void addArgumentResolvers(final List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(delegatingPowerNodeArgumentResolverFactory.create(new BlossomHandlerMethodArgumentResolver()));
-  }
-  ```
+  * If needed, add the DelegatingPowerNodeArgumentResolver in the `BlossomServletConfiguration` as follows:
+    ```java
+    @Override
+    protected void addArgumentResolvers(final List<HandlerMethodArgumentResolver> argumentResolvers) {
+          argumentResolvers.add(delegatingPowerNodeArgumentResolverFactory.create(new BlossomHandlerMethodArgumentResolver()));
+    }
+    ```

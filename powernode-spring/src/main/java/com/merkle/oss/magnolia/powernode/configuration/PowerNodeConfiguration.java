@@ -1,6 +1,9 @@
 package com.merkle.oss.magnolia.powernode.configuration;
 
 import com.merkle.oss.magnolia.powernode.NodeService;
+import com.merkle.oss.magnolia.powernode.PowerNodeDecorator;
+import com.merkle.oss.magnolia.powernode.PowerNodeService;
+
 import info.magnolia.objectfactory.Components;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +21,19 @@ import org.springframework.stereotype.Service;
 				@ComponentScan.Filter(Service.class)
 		}
 )
-public class BasePowerNodeConfiguration {
+public class PowerNodeConfiguration {
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public PowerNodeDecorator PowerNodeDecorator_binding() {
+		return Components.getComponent(PowerNodeDecorator.class);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public PowerNodeService PowerNodeService_binding() {
+		return Components.getComponent(PowerNodeService.class);
+	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
