@@ -15,13 +15,13 @@ Advantages:
   <dependency>
       <groupId>com.namics.oss.magnolia</groupId>
       <artifactId>magnolia-powernode</artifactId>
-      <version>2.1.0</version>
+      <version>2.1.1</version>
   </dependency>
   <!-- only if used with blossom -->
   <dependency>
       <groupId>com.namics.oss.magnolia</groupId>
       <artifactId>magnolia-powernode-spring</artifactId>
-      <version>2.1.0</version>
+      <version>2.1.1</version>
   </dependency>
   ```
 
