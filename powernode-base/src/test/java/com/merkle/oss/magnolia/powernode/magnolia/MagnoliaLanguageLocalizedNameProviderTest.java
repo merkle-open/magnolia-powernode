@@ -25,7 +25,7 @@ class MagnoliaLanguageLocalizedNameProviderTest {
 		doReturn(i18nContentSupport).when(site).getI18n();
 		final SiteManager siteManager = mock(SiteManager.class);
 		doReturn(site).when(siteManager).getCurrentSite();
-		localizedNameProvider = new MagnoliaLanguageLocalizedNameProvider(siteManager);
+		localizedNameProvider = new MagnoliaLanguageLocalizedNameProvider(siteManager, i18nContentSupport);
 	}
 
 	@Test

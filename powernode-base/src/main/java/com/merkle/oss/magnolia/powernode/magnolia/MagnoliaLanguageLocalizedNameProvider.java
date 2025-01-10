@@ -17,8 +17,11 @@ import com.merkle.oss.magnolia.powernode.AbstractLocalizedNameProvider;
 public class MagnoliaLanguageLocalizedNameProvider extends AbstractLocalizedNameProvider {
 
     @Inject
-	public MagnoliaLanguageLocalizedNameProvider(final SiteManager siteManager) {
-        super(siteManager);
+	public MagnoliaLanguageLocalizedNameProvider(
+			final SiteManager siteManager,
+			final I18nContentSupport i18nContentSupport
+	) {
+        super(siteManager, i18nContentSupport);
 	}
 
 	protected MagnoliaLanguageLocalizedNameProvider(final Function<Optional<Node>, I18nContentSupport> i18nContentSupportProvider) {

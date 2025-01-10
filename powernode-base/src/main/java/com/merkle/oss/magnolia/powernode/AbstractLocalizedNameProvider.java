@@ -1,6 +1,7 @@
 package com.merkle.oss.magnolia.powernode;
 
 import info.magnolia.cms.i18n.I18nContentSupport;
+import info.magnolia.module.site.Site;
 import info.magnolia.module.site.SiteManager;
 
 import java.util.Locale;
@@ -13,8 +14,11 @@ import javax.jcr.Node;
 public abstract class AbstractLocalizedNameProvider implements LocalizedNameProvider {
 	private final Function<Optional<Node>, I18nContentSupport> i18nContentSupportProvider;
 
-	protected AbstractLocalizedNameProvider(final SiteManager siteManager) {
-		this.i18nContentSupportProvider = (node) -> node.map(siteManager::getAssignedSite).orElseGet(siteManager::getCurrentSite).getI18n();
+	protected AbstractLocalizedNameProvider(
+			final SiteManager siteManager,
+			final I18nContentSupport i18nContentSupport
+	) {
+		this.i18nContentSupportProvider = (node) -> node.map(siteManager::getAssignedSite).map(Site::getI18n).orElse(i18nContentSupport);
 	}
 
 	protected AbstractLocalizedNameProvider(final Function<Optional<Node>, I18nContentSupport> i18nContentSupportProvider) {

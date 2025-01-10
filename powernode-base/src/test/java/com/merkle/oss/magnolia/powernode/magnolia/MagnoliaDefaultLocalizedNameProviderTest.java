@@ -28,7 +28,7 @@ class MagnoliaDefaultLocalizedNameProviderTest {
 		doReturn(i18nContentSupport).when(site).getI18n();
 		final SiteManager siteManager = mock(SiteManager.class);
 		doReturn(site).when(siteManager).getAssignedSite(any(Node.class));
-		localizedNameProvider = new MagnoliaDefaultLocalizedNameProvider(siteManager);
+		localizedNameProvider = new MagnoliaDefaultLocalizedNameProvider(siteManager, i18nContentSupport);
 	}
 
 	@Test
