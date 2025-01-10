@@ -17,6 +17,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>info.magnolia.site</groupId>
+            <artifactId>magnolia-site</artifactId>
+        </dependency>
         <!-- testing -->
         <dependency>
             <groupId>info.magnolia</groupId>

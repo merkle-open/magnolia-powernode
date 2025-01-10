@@ -2,6 +2,9 @@ package com.merkle.oss.magnolia.powernode.magnolia;
 
 import com.merkle.oss.magnolia.powernode.LocalizedNameProvider;
 import info.magnolia.cms.i18n.I18nContentSupport;
+import info.magnolia.module.site.Site;
+import info.magnolia.module.site.SiteManager;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +21,11 @@ class MagnoliaLanguageLocalizedNameProviderTest {
 	void setUp() {
 		final I18nContentSupport i18nContentSupport = mock(I18nContentSupport.class);
 		doReturn(Locale.CANADA).when(i18nContentSupport).getDefaultLocale();
-		localizedNameProvider = new MagnoliaLanguageLocalizedNameProvider(i18nContentSupport);
+		final Site site = mock(Site.class);
+		doReturn(i18nContentSupport).when(site).getI18n();
+		final SiteManager siteManager = mock(SiteManager.class);
+		doReturn(site).when(siteManager).getCurrentSite();
+		localizedNameProvider = new MagnoliaLanguageLocalizedNameProvider(siteManager);
 	}
 
 	@Test

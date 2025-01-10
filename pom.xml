@@ -120,6 +120,10 @@
             <artifactId>magnolia-rendering</artifactId>
             <!-- required to implement PowerNodeArgumentResolver -->
         </dependency>
+        <dependency>
+            <groupId>info.magnolia.site</groupId>
+            <artifactId>magnolia-site</artifactId>
+        </dependency>
 
 
         <dependency>
