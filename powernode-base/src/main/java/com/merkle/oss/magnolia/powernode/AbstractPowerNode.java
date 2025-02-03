@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -15,6 +16,7 @@ import javax.annotation.Nullable;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends ContentDecoratorNodeWrapper<AbstractPowerNodeDecorator<N>> {
 	private final NodeService nodeService;
@@ -185,6 +187,23 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 	}
 	public Optional<Property> removeProperty(final String propertyName, final Locale locale) {
 		return nodeService.removeProperty(getWrappedNode(), propertyName, locale);
+	}
+
+	public Optional<N> toSystemSession() {
+		return toSession(nodeService::getSystemSession);
+	}
+
+	public Optional<N> toUserSession() {
+		return toSession(nodeService::getSession);
+	}
+
+	private Optional<N> toSession(final Function<String, Optional<Session>> sessionProvider) {
+		return sessionProvider
+				.apply(getOrThrow(node -> node.getSession().getWorkspace().getName()))
+				.flatMap(session ->
+						nodeService.getByIdentifier(session, getOrThrow(Node::getIdentifier))
+				)
+				.map(this::wrapNode);
 	}
 
 	@Override
