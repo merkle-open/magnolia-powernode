@@ -1,6 +1,8 @@
 package com.merkle.oss.magnolia.powernode;
 
 import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
+
+import info.magnolia.jcr.util.NodeUtil;
 import info.magnolia.test.mock.jcr.MockNode;
 import info.magnolia.test.mock.jcr.MockSession;
 import org.junit.jupiter.api.Test;
@@ -58,6 +60,11 @@ class AbstractPowerNodeTest {
 						@Override
 						protected PowerNode wrapNodeInternal(Node node) {
 							return new PowerNode(node);
+						}
+
+						@Override
+						protected Node unwrapNodeInternal(Node node) {
+							return NodeUtil.deepUnwrap(node, PowerNode.class);
 						}
 					});
 		}

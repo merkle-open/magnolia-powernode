@@ -2,6 +2,7 @@ package com.merkle.oss.magnolia.powernode.mock;
 
 import com.merkle.oss.magnolia.powernode.*;
 import info.magnolia.jcr.util.NodeNameHelper;
+import info.magnolia.jcr.util.NodeUtil;
 
 import javax.jcr.Node;
 import java.time.ZoneId;
@@ -24,8 +25,13 @@ public class MockPowerNode extends AbstractPowerNode<MockPowerNode> {
 
 	public static class MockPowerNodeDecorator extends AbstractPowerNodeDecorator<MockPowerNode> {
 		@Override
-		protected MockPowerNode wrapNodeInternal(Node node) {
+		protected MockPowerNode wrapNodeInternal(final Node node) {
 			return new MockPowerNode(nodeService(), node, this);
+		}
+
+		@Override
+		protected Node unwrapNodeInternal(final Node node) {
+			return NodeUtil.deepUnwrap(node, MockPowerNode.class);
 		}
 	}
 

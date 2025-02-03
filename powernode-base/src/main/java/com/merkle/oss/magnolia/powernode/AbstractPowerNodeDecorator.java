@@ -9,14 +9,25 @@ import javax.jcr.NodeIterator;
 public abstract class AbstractPowerNodeDecorator<N extends AbstractPowerNode<N>> extends AbstractContentDecorator {
 
 	protected abstract N wrapNodeInternal(final Node node);
+	protected abstract Node unwrapNodeInternal(final Node node);
 
 	@Override
 	@Nullable
-	public N wrapNode(@Nullable Node node) {
-		if(node != null && !isDecorating(node)) {
-			return wrapNodeInternal(node);
+	public N wrapNode(@Nullable final Node node) {
+		if(node == null) {
+			return null;
 		}
-		return (N)node;
+		if(node instanceof AbstractPowerNode) {
+			return (N) node;
+		}
+		return wrapNodeInternal(unwrap(node));
+	}
+
+	private Node unwrap(final Node node) {
+		if(isDecorating(node)) {
+			return unwrapNodeInternal(node);
+		}
+		return node;
 	}
 
 	@Override
