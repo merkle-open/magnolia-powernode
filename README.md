@@ -17,7 +17,7 @@ Advantages:
       <artifactId>magnolia-powernode</artifactId>
       <version>2.1.4</version>
   </dependency>
-  <!-- only if used with blossom -->
+  <!-- only if used with spring -->
   <dependency>
       <groupId>com.merkle.oss.magnolia</groupId>
       <artifactId>magnolia-powernode-spring</artifactId>
@@ -53,24 +53,32 @@ Advantages:
     <id>main</id>
     <component>
       <type>java.time.ZoneId</type>
-      <provider>com.namics.engagement.web.configuration.TimeZoneProvider</provider>
+      <provider>some.package.TimeZoneProvider</provider>
     </component>
   </components>
   ```
 
-* Import Spring Configuration (only if used with blossom):
+* Import Spring Configuration (only if used with spring):
   ```java
+  import javax.inject.Inject;
+  import com.merkle.oss.magnolia.powernode.DelegatingPowerNodeArgumentResolver;
+  import com.merkle.oss.magnolia.powernode.configuration.PowerNodeConfiguration;
+  import com.merkle.oss.magnolia.renderer.spring.MagnoliaHandlerMethodArgumentResolver;
+      
   @Configuration
   @Import({PowerNodeConfiguration.class})
-  public class BlossomServletConfiguration {
-      //...
-  }
-  ```
-
-  * If needed, add the DelegatingPowerNodeArgumentResolver in the `BlossomServletConfiguration` as follows:
-    ```java
+  public class SpringRendererServletConfiguration {
+    private final DelegatingPowerNodeArgumentResolver.Factory delegatingPowerNodeArgumentResolverFactory;
+      
+    @Inject
+    public SpringRendererServletConfiguration(final DelegatingPowerNodeArgumentResolver.Factory delegatingPowerNodeArgumentResolverFactory) {
+        this.delegatingPowerNodeArgumentResolverFactory = delegatingPowerNodeArgumentResolverFactory;
+    }
+    
+    // Optional if you want to be able to inject PowerNode in spring controllers
     @Override
     protected void addArgumentResolvers(final List<HandlerMethodArgumentResolver> argumentResolvers) {
-          argumentResolvers.add(delegatingPowerNodeArgumentResolverFactory.create(new BlossomHandlerMethodArgumentResolver()));
+        argumentResolvers.add(delegatingPowerNodeArgumentResolverFactory.create(new MagnoliaHandlerMethodArgumentResolver()));
     }
-    ```
+  }
+  ```
