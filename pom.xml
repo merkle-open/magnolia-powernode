@@ -38,7 +38,7 @@
 
     <properties>
         <!--check for new versions:  mvn versions:display-property-updates -->
-        <magnolia.version>6.3.0</magnolia.version>
+        <magnolia.version>6.3.8</magnolia.version>
         <spring.version>5.3.39</spring.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.inject.version>1</javax.inject.version>
@@ -46,14 +46,14 @@
         <jsr305.nullable.version>3.0.2</jsr305.nullable.version>
 
         <!-- Testing -->
-        <junit.version>5.11.0</junit.version>
-        <mockito.version>5.13.0</mockito.version>
+        <junit.version>5.12.2</junit.version>
+        <mockito.version>5.18.0</mockito.version>
 
         <!-- Maven Plugins -->
-        <mvn.compiler.plugin.version>3.13.0</mvn.compiler.plugin.version>
+        <mvn.compiler.plugin.version>3.14.0</mvn.compiler.plugin.version>
         <mvn.source.plugin.version>3.3.1</mvn.source.plugin.version>
-        <mvn.javadoc.version>3.5.0</mvn.javadoc.version>
-        <mvn.surefire.plugin.version>3.5.0</mvn.surefire.plugin.version>
+        <mvn.javadoc.version>3.11.2</mvn.javadoc.version>
+        <mvn.surefire.plugin.version>3.5.3</mvn.surefire.plugin.version>
         <mvn.gpg.plugin.version>3.0.1</mvn.gpg.plugin.version>
         <mvn.nexus-staging.plugin.version>1.6.13</mvn.nexus-staging.plugin.version>
         <mvn.exec.plugin.version>3.1.0</mvn.exec.plugin.version>
@@ -62,6 +62,7 @@
         <javaVersion>17</javaVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.version.ignore>.*-M.*,.*-alpha.*,.*-beta.*,.*-rc.*,.*-RC.*</maven.version.ignore>
     </properties>
 
     <dependencyManagement>
