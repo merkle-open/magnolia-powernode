@@ -13,13 +13,13 @@ Advantages:
 * Add Maven dependencies:
   ```xml
   <dependency>
-      <groupId>com.namics.oss.magnolia</groupId>
+      <groupId>com.merkle.oss.magnolia</groupId>
       <artifactId>magnolia-powernode</artifactId>
       <version>2.1.4</version>
   </dependency>
   <!-- only if used with blossom -->
   <dependency>
-      <groupId>com.namics.oss.magnolia</groupId>
+      <groupId>com.merkle.oss.magnolia</groupId>
       <artifactId>magnolia-powernode-spring</artifactId>
       <version>2.1.4</version>
   </dependency>
