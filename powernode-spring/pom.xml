@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>magnolia-powernode-spring</artifactId>
+  <name>PowerNode - Spring</name>
 
   <properties>
     <maven.deploy.skip>false</maven.deploy.skip>
