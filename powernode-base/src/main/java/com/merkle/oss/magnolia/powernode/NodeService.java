@@ -83,7 +83,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 		run(() -> {
 			if (!Objects.equals(node.getName(), newName)) {
 				final String validatedName = nodeNameHelper.getValidatedName(newName);
-				final String destinationPath = node.getParent().getPath() + "/" + validatedName;
+				final String destinationPath = node.getParent().getPath()  + (node.getParent().getDepth() > 0 ? "/" : "") + validatedName;
 
 				@Nullable
 				final Node nextSibling = getNextSibling(node).orElse(null);

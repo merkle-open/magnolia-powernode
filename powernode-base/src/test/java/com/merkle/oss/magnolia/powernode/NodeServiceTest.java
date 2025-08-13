@@ -97,11 +97,16 @@ class NodeServiceTest {
 	void rename() throws RepositoryException {
 		final Node node1 = session.getRootNode().addNode("node1", "someNodeType");
 		final Node node2 = session.getRootNode().addNode("node2", "someNodeType");
+		final Node node3 = node2.addNode("node3", "someNodeType");
 		try (MockedStatic<NodeTypes.LastModified> lastModified = mockStatic(NodeTypes.LastModified.class)) {
 			nodeService.rename(node1, "node1Renamed");
+			nodeService.rename(node3, "node3Renamed");
 			lastModified.verify(() -> NodeTypes.LastModified.update(node1));
+			lastModified.verify(() -> NodeTypes.LastModified.update(node3));
 			Optional<Node> node1Renamed = nodeService.getByPath(session, "/node1Renamed");
+			Optional<Node> node3Renamed = nodeService.getByPath(session, "/node2/node3Renamed");
 			assertTrue(node1Renamed.isPresent());
+			assertTrue(node3Renamed.isPresent());
 
 			//assert order
 			assertEquals(
