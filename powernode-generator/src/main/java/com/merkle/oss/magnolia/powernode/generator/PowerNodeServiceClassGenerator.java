@@ -4,7 +4,7 @@ import com.merkle.oss.magnolia.powernode.AbstractPowerNodeService;
 import com.merkle.oss.magnolia.powernode.NodeService;
 import com.squareup.javapoet.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.lang.model.element.Modifier;
 import java.util.List;
 

@@ -38,21 +38,20 @@
 
     <properties>
         <!--check for new versions:  mvn versions:display-property-updates -->
-        <magnolia.version>6.3.13</magnolia.version>
-        <spring.version>5.3.39</spring.version>
+        <magnolia.version>6.4.0</magnolia.version>
+        <spring.version>6.1.21</spring.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.inject.version>1</javax.inject.version>
         <java-poet.version>1.13.0</java-poet.version>
-        <jsr305.nullable.version>3.0.2</jsr305.nullable.version>
 
         <!-- Testing -->
         <junit.version>5.13.4</junit.version>
-        <mockito.version>5.18.0</mockito.version>
+        <mockito.version>5.19.0</mockito.version>
 
         <!-- Maven Plugins -->
         <mvn.compiler.plugin.version>3.14.0</mvn.compiler.plugin.version>
         <mvn.source.plugin.version>3.3.1</mvn.source.plugin.version>
-        <mvn.javadoc.version>3.11.2</mvn.javadoc.version>
+        <mvn.javadoc.version>3.11.3</mvn.javadoc.version>
         <mvn.surefire.plugin.version>3.5.3</mvn.surefire.plugin.version>
         <mvn.exec.plugin.version>3.1.0</mvn.exec.plugin.version>
         <mvn.build-helper.plugin.version>3.4.0</mvn.build-helper.plugin.version>
@@ -89,11 +88,6 @@
                 <artifactId>magnolia-powernode</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.google.code.findbugs</groupId>
-                <artifactId>jsr305</artifactId>
-                <version>${jsr305.nullable.version}</version>
-            </dependency>
 
             <!-- testing -->
             <dependency>
@@ -107,9 +101,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${javax.inject.version}</version>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
         </dependency>
         <dependency>
             <groupId>info.magnolia</groupId>
@@ -128,15 +121,15 @@
 
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet-api.version}</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.4.4</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-        </dependency>
 
         <!-- testing -->
         <dependency>
@@ -166,8 +159,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${mvn.compiler.plugin.version}</version>
                 <configuration>
-                    <source>${javaVersion}</source>
-                    <target>${javaVersion}</target>
+          <release>17</release>
                 </configuration>
             </plugin>
             <plugin>

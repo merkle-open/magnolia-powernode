@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
@@ -208,8 +208,7 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 
 	@Override
 	public boolean equals(final Object other) {
-		if (other instanceof AbstractPowerNode) {
-			final AbstractPowerNode<?> otherPowerNode = (AbstractPowerNode<?>) other;
+		if (other instanceof AbstractPowerNode<?> otherPowerNode) {
 			return getOrThrow(wrappedNode ->
 					Objects.equals(wrappedNode.getIdentifier(), otherPowerNode.getIdentifier()) &&
 					Objects.equals(getWorkspaceName(), otherPowerNode.getWorkspaceName())

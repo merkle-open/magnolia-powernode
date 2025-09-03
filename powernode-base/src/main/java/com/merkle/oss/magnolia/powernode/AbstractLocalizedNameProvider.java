@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 
 public abstract class AbstractLocalizedNameProvider implements LocalizedNameProvider {

@@ -4,8 +4,8 @@ import com.merkle.oss.magnolia.powernode.JcrSessionProvider;
 import info.magnolia.context.MgnlContext;
 import info.magnolia.context.SystemContext;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 

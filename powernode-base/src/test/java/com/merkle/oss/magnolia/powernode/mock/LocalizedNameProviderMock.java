@@ -2,7 +2,7 @@ package com.merkle.oss.magnolia.powernode.mock;
 
 import com.merkle.oss.magnolia.powernode.LocalizedNameProvider;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 import java.util.Locale;
 

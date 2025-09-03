@@ -1,5 +1,9 @@
 package com.merkle.oss.magnolia.powernode;
 
+import java.util.Optional;
+
+import javax.jcr.Node;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -7,13 +11,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.jcr.Node;
-import java.util.Optional;
-
-import com.merkle.oss.magnolia.powernode.PowerNode;
-import com.merkle.oss.magnolia.powernode.PowerNodeDecorator;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 /**
  * Resolves arguments with type {@link PowerNode} by resolving type {@link Node} and wrapping it.

@@ -4,7 +4,7 @@ import info.magnolia.jcr.util.NodeUtil;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jcr.Node;
 import javax.lang.model.element.Modifier;
 
