@@ -261,10 +261,7 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 
 	private <T> T localizeProperty(final Node node, final String propertyName, final Locale locale, final Function<String, T> provider) {
-		if (!NodeUtil.isWrappedWith(node, I18nNodeWrapper.class)) {
-			return provider.apply(localizedNameProvider.getLocalizedPropertyName(node, propertyName, locale));
-		}
-		return provider.apply(propertyName);
+        return provider.apply(localizedNameProvider.getLocalizedPropertyName(node, propertyName, locale));
 	}
 	private <T> T localizeNode(final Node node, final String nodeName, final Locale locale, final Function<String, T> provider) {
 		return provider.apply(localizedNameProvider.getLocalizedNodeName(node, nodeName, locale));

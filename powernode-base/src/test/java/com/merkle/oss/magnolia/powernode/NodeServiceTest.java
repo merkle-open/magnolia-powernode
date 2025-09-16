@@ -5,13 +5,9 @@ import com.machinezoo.noexception.Exceptions;
 import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
 import com.merkle.oss.magnolia.powernode.mock.JcrSessionProviderMock;
 import com.merkle.oss.magnolia.powernode.mock.MockSession;
-import info.magnolia.cms.i18n.DefaultI18nContentSupport;
-import info.magnolia.cms.i18n.I18nContentSupport;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.PropertyUtil;
-import info.magnolia.jcr.wrapper.I18nNodeWrapper;
-import info.magnolia.test.ComponentsTestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -301,17 +297,8 @@ class NodeServiceTest {
 
 	@Test
 	void property_localized() throws RepositoryException {
-		testPropertyLocalized(session.getRootNode().addNode("node", "someNodeType"));
-	}
-
-	@Test
-	void property_localized_wrappedWithI18nNodeWrapper() throws RepositoryException {
-		ComponentsTestUtil.setImplementation(I18nContentSupport.class, DefaultI18nContentSupport.class); // for repository
-		testPropertyLocalized(new I18nNodeWrapper(session.getRootNode().addNode("node", "someNodeType")));
-	}
-
-	private void testPropertyLocalized(final Node node) {
-		nodeService.setProperty(node, "someKey", Locale.CANADA, "someValue", ValueConverter::toValue);
+        final Node node = session.getRootNode().addNode("node", "someNodeType");
+        nodeService.setProperty(node, "someKey", Locale.CANADA, "someValue", ValueConverter::toValue);
 		assertTrue(nodeService.hasProperty(node, "someKey", Locale.CANADA));
 		assertEquals(
 				Optional.of("someValue"),
@@ -336,24 +323,16 @@ class NodeServiceTest {
 
 	@Test
 	void multiProperty_localized() throws RepositoryException {
-		testMultiPropertyLocalized(session.getRootNode().addNode("node", "someNodeType"));
-	}
+        final Node node = session.getRootNode().addNode("node", "someNodeType");
 
-	@Test
-	void multiProperty_localized_wrappedWithI18nNodeWrapper() throws RepositoryException {
-		ComponentsTestUtil.setImplementation(I18nContentSupport.class, DefaultI18nContentSupport.class); // for repository
-		testMultiPropertyLocalized(new I18nNodeWrapper(session.getRootNode().addNode("node", "someNodeType")));
-	}
-
-	private void testMultiPropertyLocalized(final Node node) {
-		nodeService.setMultiProperty(node, "someKey", Locale.CANADA, List.of("someValue", "someOtherValue"), ValueConverter::toValue);
-		assertTrue(nodeService.hasProperty(node, "someKey", Locale.CANADA));
-		assertEquals(
-				List.of("someValue", "someOtherValue"),
-				nodeService.streamMultiProperty(node, "someKey", Locale.CANADA, ValueConverter::getString).collect(Collectors.toList())
-		);
-		nodeService.removeProperty(node, "someKey", Locale.CANADA);
-		assertFalse(nodeService.hasProperty(node, "someKey", Locale.CANADA));
+        nodeService.setMultiProperty(node, "someKey", Locale.CANADA, List.of("someValue", "someOtherValue"), ValueConverter::toValue);
+        assertTrue(nodeService.hasProperty(node, "someKey", Locale.CANADA));
+        assertEquals(
+                List.of("someValue", "someOtherValue"),
+                nodeService.streamMultiProperty(node, "someKey", Locale.CANADA, ValueConverter::getString).collect(Collectors.toList())
+        );
+        nodeService.removeProperty(node, "someKey", Locale.CANADA);
+        assertFalse(nodeService.hasProperty(node, "someKey", Locale.CANADA));
 	}
 
 	private static class NodeTypePredicate implements Predicate<Node> {
