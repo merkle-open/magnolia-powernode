@@ -15,13 +15,13 @@ Advantages:
   <dependency>
       <groupId>com.merkle.oss.magnolia</groupId>
       <artifactId>magnolia-powernode</artifactId>
-      <version>2.1.6</version>
+      <version>2.2.0</version>
   </dependency>
   <!-- only if used with spring -->
   <dependency>
       <groupId>com.merkle.oss.magnolia</groupId>
       <artifactId>magnolia-powernode-spring</artifactId>
-      <version>2.1.6</version>
+      <version>2.2.0</version>
   </dependency>
   ```
 
