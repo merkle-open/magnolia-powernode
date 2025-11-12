@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 import javax.jcr.Node;
 
 import com.merkle.oss.magnolia.powernode.AbstractLocalizedNameProvider;

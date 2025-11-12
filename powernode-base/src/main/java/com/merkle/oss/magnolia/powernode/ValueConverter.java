@@ -2,8 +2,8 @@ package com.merkle.oss.magnolia.powernode;
 
 import org.apache.jackrabbit.value.ValueFactoryImpl;
 
-import javax.annotation.Nullable;
-import javax.inject.Provider;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Provider;
 import javax.jcr.*;
 import java.math.BigDecimal;
 import java.time.*;

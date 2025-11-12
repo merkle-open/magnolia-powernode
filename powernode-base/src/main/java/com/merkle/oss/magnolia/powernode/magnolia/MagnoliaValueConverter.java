@@ -4,9 +4,9 @@ import com.machinezoo.noexception.Exceptions;
 import com.merkle.oss.magnolia.powernode.ValueConverter;
 import info.magnolia.link.LinkUtil;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;

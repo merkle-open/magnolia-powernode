@@ -1,7 +1,7 @@
 package com.merkle.oss.magnolia.powernode.mock;
 
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;

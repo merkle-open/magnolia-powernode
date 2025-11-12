@@ -4,7 +4,7 @@ import info.magnolia.jcr.decoration.AbstractContentDecorator;
 import info.magnolia.jcr.util.NodeUtil;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 

@@ -1,7 +1,7 @@
 package com.merkle.oss.magnolia.powernode;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 import javax.jcr.*;
 import java.util.ArrayList;
 import java.util.List;

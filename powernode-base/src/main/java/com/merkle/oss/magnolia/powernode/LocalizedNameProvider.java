@@ -1,6 +1,6 @@
 package com.merkle.oss.magnolia.powernode;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.jcr.Node;
 import java.util.Locale;
 

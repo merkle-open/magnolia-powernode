@@ -7,9 +7,9 @@ import info.magnolia.jcr.predicate.JCRMgnlPropertyHidingPredicate;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.NodeUtil;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
