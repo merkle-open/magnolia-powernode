@@ -48,7 +48,7 @@ public class PowerNodeDecoratorClassGenerator implements ClassGenerator {
 
 		final TypeSpec type = TypeSpec.classBuilder(CLASS_NAME)
 				.addAnnotations(List.of(additionalClassAnnotations))
-				.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+				.addModifiers(Modifier.PUBLIC)
 				.superclass(ParameterizedTypeName.get(ClassName.get(AbstractPowerNodeDecorator.class), PowerNodeClassGenerator.CLASS_NAME))
 				.addField(NodeService.class, "nodeService", Modifier.PRIVATE, Modifier.FINAL)
 				.addMethod(constructor)
