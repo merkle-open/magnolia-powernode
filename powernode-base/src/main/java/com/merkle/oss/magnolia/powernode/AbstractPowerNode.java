@@ -110,15 +110,12 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 	public Stream<N> streamChildren() {
 		return nodeService.streamChildren(getWrappedNode()).map(this::wrapNode);
 	}
-
 	public Stream<N> streamChildren(final Predicate<N> predicate) {
 		return nodeService.streamChildren(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
 	}
-
 	public Stream<N> streamChildrenRecursive() {
 		return nodeService.streamChildrenRecursive(getWrappedNode()).map(this::wrapNode);
 	}
-
 	/**
 	 * @param predicate has no impact on the traversed children (only filters)
 	 */
@@ -134,9 +131,18 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 	public Optional<N> getAncestor(final Predicate<N> predicate) {
 		return nodeService.getAncestor(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
 	}
-
 	public Optional<N> getAncestorOrSelf(final Predicate<N> predicate) {
 		return nodeService.getAncestorOrSelf(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
+	}
+
+	public Stream<N> streamAncestors(final Predicate<N> predicate) {
+		return nodeService.streamAncestors(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
+	}
+	/**
+	 * @param predicate has no impact on the traversed parents (only filters)
+	 */
+	public Stream<N> streamAncestorsAndSelf(final Predicate<N> predicate) {
+		return nodeService.streamAncestorsAndSelf(getWrappedNode(), node -> predicate.test(wrapNode(node))).map(this::wrapNode);
 	}
 
 	//Override due to link uuid conversion (see ValueConverter)

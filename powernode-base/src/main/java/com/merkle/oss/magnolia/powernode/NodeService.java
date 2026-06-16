@@ -210,12 +210,26 @@ public class NodeService extends RepositoryExceptionDelegator {
 				Optional.of(parent).filter(predicate).or(() -> getAncestor(parent, predicate))
 		);
 	}
-
 	public Optional<Node> getAncestorOrSelf(final Node node, final Predicate<Node> predicate) {
 		if(predicate.test(node)) {
 			return Optional.of(node);
 		}
 		return getAncestor(node, predicate);
+	}
+
+	public Stream<Node> streamAncestors(final Node node, final Predicate<Node> predicate) {
+		return getParent(node).stream().flatMap(parent ->
+				Stream.concat(
+						Stream.of(parent).filter(predicate),
+						streamAncestors(parent, predicate)
+				)
+		);
+	}
+	public Stream<Node> streamAncestorsAndSelf(final Node node, final Predicate<Node> predicate) {
+		return Stream.concat(
+				Stream.of(node).filter(predicate),
+				streamAncestors(node, predicate)
+		);
 	}
 
 	public boolean hasProperty(final Node node, final String propertyName) {
