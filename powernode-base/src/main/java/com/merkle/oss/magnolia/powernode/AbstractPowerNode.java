@@ -2,6 +2,7 @@ package com.merkle.oss.magnolia.powernode;
 
 import info.magnolia.jcr.decoration.ContentDecoratorNodeWrapper;
 import info.magnolia.jcr.util.NodeTypes;
+import info.magnolia.jcr.wrapper.DelegateNodeWrapper;
 
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +51,9 @@ public abstract class AbstractPowerNode<N extends AbstractPowerNode<N>> extends 
 		void accept(Node node) throws RepositoryException;
 	}
 
+	public <T extends DelegateNodeWrapper> Optional<T> getWrapper(final Class<T> wrapper) {
+		return nodeService.getWrapper(getWrappedNode(), wrapper);
+	}
 
 	@Override
 	protected N wrapNode(final Node node) {

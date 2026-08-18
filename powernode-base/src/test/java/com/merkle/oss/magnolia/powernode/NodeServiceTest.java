@@ -8,6 +8,9 @@ import com.merkle.oss.magnolia.powernode.mock.MockSession;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.PropertyUtil;
+import info.magnolia.jcr.wrapper.HTMLEscapingNodeWrapper;
+import info.magnolia.jcr.wrapper.I18nNodeWrapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -333,6 +336,17 @@ class NodeServiceTest {
         );
         nodeService.removeProperty(node, "someKey", Locale.CANADA);
         assertFalse(nodeService.hasProperty(node, "someKey", Locale.CANADA));
+	}
+
+	@Test
+	void getWrapper() throws RepositoryException {
+		final Node node = session.getRootNode().addNode("node", "someNodeType");
+		final I18nNodeWrapper i18nNodeWrapper = new I18nNodeWrapper(node);
+		final Node wrapped = new HTMLEscapingNodeWrapper(i18nNodeWrapper, true);
+		assertEquals(
+				Optional.of(i18nNodeWrapper),
+				nodeService.getWrapper(wrapped, I18nNodeWrapper.class)
+		);
 	}
 
 	private static class NodeTypePredicate implements Predicate<Node> {

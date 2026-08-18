@@ -2,8 +2,7 @@ package com.merkle.oss.magnolia.powernode;
 
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
-import info.magnolia.jcr.util.NodeUtil;
-import info.magnolia.jcr.wrapper.I18nNodeWrapper;
+import info.magnolia.jcr.wrapper.DelegateNodeWrapper;
 
 import java.util.Iterator;
 import java.util.Locale;
@@ -17,8 +16,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import jakarta.annotation.Nullable;
-import jakarta.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
@@ -27,6 +24,9 @@ import javax.jcr.Session;
 
 import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaData;
 import com.merkle.oss.magnolia.powernode.predicate.magnolia.IsMetaDataProperty;
+
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 
 public class NodeService extends RepositoryExceptionDelegator {
 	private final LocalizedNameProvider localizedNameProvider;
@@ -279,5 +279,15 @@ public class NodeService extends RepositoryExceptionDelegator {
 	}
 	private <T> T localizeNode(final Node node, final String nodeName, final Locale locale, final Function<String, T> provider) {
 		return provider.apply(localizedNameProvider.getLocalizedNodeName(node, nodeName, locale));
+	}
+
+	public <T extends DelegateNodeWrapper> Optional<T> getWrapper(final Node node, final Class<T> wrapper) {
+		if (wrapper.isInstance(node)) {
+			return Optional.of((T)node);
+		}
+		if (node instanceof DelegateNodeWrapper) {
+			return getWrapper(((DelegateNodeWrapper) node).getWrappedNode(), wrapper);
+		}
+		return Optional.empty();
 	}
 }
