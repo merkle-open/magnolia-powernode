@@ -25,7 +25,6 @@
         <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>javapoet</artifactId>
-            <version>${java-poet.version}</version>
         </dependency>
     </dependencies>
 </project>
