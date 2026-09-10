@@ -1,33 +1,45 @@
 package com.merkle.oss.magnolia.powernode;
 
-import com.google.common.collect.Lists;
-import com.machinezoo.noexception.Exceptions;
-import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
-import com.merkle.oss.magnolia.powernode.mock.JcrSessionProviderMock;
-import com.merkle.oss.magnolia.powernode.mock.MockSession;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+import info.magnolia.cms.i18n.DefaultI18nContentSupport;
+import info.magnolia.cms.i18n.I18nContentSupport;
 import info.magnolia.jcr.util.NodeNameHelper;
 import info.magnolia.jcr.util.NodeTypes;
 import info.magnolia.jcr.util.PropertyUtil;
 import info.magnolia.jcr.wrapper.HTMLEscapingNodeWrapper;
 import info.magnolia.jcr.wrapper.I18nNodeWrapper;
+import info.magnolia.test.junit5.ComponentProviderSupport;
+import info.magnolia.test.junit5.MagnoliaTest;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
+import com.google.common.collect.Lists;
+import com.machinezoo.noexception.Exceptions;
+import com.merkle.oss.magnolia.powernode.mock.JcrSessionProviderMock;
+import com.merkle.oss.magnolia.powernode.mock.LocalizedNameProviderMock;
+import com.merkle.oss.magnolia.powernode.mock.MockSession;
+
+@MagnoliaTest
 class NodeServiceTest {
 	private MockSession session;
 	private NodeService nodeService;
@@ -339,7 +351,8 @@ class NodeServiceTest {
 	}
 
 	@Test
-	void getWrapper() throws RepositoryException {
+	void getWrapper(final ComponentProviderSupport componentProviderSupport) throws RepositoryException {
+		componentProviderSupport.setImplementation(I18nContentSupport.class, DefaultI18nContentSupport.class);
 		final Node node = session.getRootNode().addNode("node", "someNodeType");
 		final I18nNodeWrapper i18nNodeWrapper = new I18nNodeWrapper(node);
 		final Node wrapped = new HTMLEscapingNodeWrapper(i18nNodeWrapper, true);
