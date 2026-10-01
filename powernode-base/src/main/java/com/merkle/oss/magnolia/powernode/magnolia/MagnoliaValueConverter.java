@@ -33,7 +33,7 @@ public class MagnoliaValueConverter extends ValueConverter {
 		try {
 			return LinkUtil.convertAbsoluteLinksToUUIDs(value);
 		} catch (Exception e) {
-			LOG.error("Failed to convert absolute links to identifiers for '{}', resolving original value...", value, e);
+			LOG.debug("Failed to convert absolute links to identifiers for '{}', resolving original value...", value, e);
             return value;
         }
 	}
@@ -45,7 +45,7 @@ public class MagnoliaValueConverter extends ValueConverter {
 		try {
 			return LinkUtil.convertLinksFromUUIDPattern(value);
 		} catch (Exception e) {
-			LOG.error("Failed to convert links from identifier pattern for '{}', resolving original value...", value, e);
+			LOG.debug("Failed to convert links from identifier pattern for '{}', resolving original value...", value, e);
 			return value;
 		}
 	}

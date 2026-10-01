@@ -36,7 +36,7 @@ public class RepositoryExceptionDelegator {
 		} catch (RuntimeRepositoryException e) {
 			return get(() -> {throw (RepositoryException)e.getCause();});
 		} catch (RepositoryException e) {
-			LOG.error("Failed to apply node function!", e);
+			LOG.debug("Failed to apply node function!", e);
 			return Optional.empty();
 		}
 	}
