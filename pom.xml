@@ -38,13 +38,13 @@
 
     <properties>
         <!--check for new versions:  mvn versions:display-property-updates -->
-        <magnolia.version>6.4.9</magnolia.version>
+        <magnolia.version>6.4.10</magnolia.version>
         <spring.version>7.0.9</spring.version>
         <java-poet.version>1.13.0</java-poet.version>
 
         <!-- Testing -->
         <junit.version>6.1.3</junit.version>
-        <mockito.version>5.23.0</mockito.version>
+        <mockito.version>5.24.0</mockito.version>
 
         <!-- Maven Plugins -->
         <mvn.compiler.plugin.version>3.16.0</mvn.compiler.plugin.version>
